@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Writing room · grammai</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f6f7f8;
+        color: #202522;
+        font:
+          15px/1.7 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      header {
+        height: 76px;
+        background: white;
+        border-bottom: 1px solid #e4e7e5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 48px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 23px;
+        font-weight: 650;
+        letter-spacing: -0.8px;
+      }
+      .mark {
+        display: grid;
+        place-items: center;
+        background: #087f64;
+        color: white;
+        width: 34px;
+        height: 34px;
+        border-radius: 50% 50% 50% 8px;
+        font-size: 22px;
+      }
+      .tag {
+        color: #69716c;
+        font-size: 13px;
+      }
+      main {
+        max-width: 1220px;
+        padding: 54px 40px;
+        margin: auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 256px;
+        gap: 40px;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 1.7px;
+        color: #68756d;
+        font-weight: 650;
+      }
+      h1 {
+        font-size: 30px;
+        letter-spacing: -1.1px;
+        line-height: 1.25;
+        margin: 9px 0 29px;
+        font-weight: 600;
+      }
+      .paper {
+        padding: 38px 44px 30px;
+        background: white;
+        border: 1px solid #e2e7e3;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px #14291c04;
+      }
+      label {
+        display: block;
+        color: #526157;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 14px;
+      }
+      textarea {
+        width: 100%;
+        height: 310px;
+        resize: vertical;
+        background: white;
+        border: 0;
+        outline: none;
+        font:
+          17px/1.9 Georgia,
+          serif;
+        color: #29352e;
+        padding: 0;
+      }
+      textarea:focus {
+        outline: none;
+      }
+      .editor-footer {
+        border-top: 1px solid #edf0ed;
+        margin-top: 20px;
+        padding-top: 16px;
+        display: flex;
+        justify-content: space-between;
+        color: #7a847e;
+        font-size: 12px;
+      }
+      .sidebar {
+        padding-top: 78px;
+      }
+      .sidebar h2 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 0;
+      }
+      .sidebar p {
+        font-size: 13px;
+        color: #728077;
+        line-height: 1.8;
+      }
+      .sidebar hr {
+        border: 0;
+        border-top: 1px solid #e1e6e2;
+        margin: 24px 0;
+      }
+      .dot {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 100%;
+        background: #159778;
+        margin-right: 7px;
+      }
+      details {
+        margin-top: 24px;
+      }
+      summary {
+        font-size: 13px;
+        color: #617067;
+        cursor: pointer;
+      }
+      #rich {
+        margin-top: 16px;
+        min-height: 120px;
+        border: 1px solid #dfe5e0;
+        border-radius: 8px;
+        padding: 18px;
+        font-size: 16px;
+        outline-color: #00866a;
+      }
+      a {
+        color: #0a8064;
+      }
+      .small {
+        font-size: 12px;
+        color: #7c8980;
+      }
+      @media (max-width: 800px) {
+        main {
+          padding: 30px 20px;
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          padding: 0;
+        }
+        .paper {
+          padding: 26px;
+        }
+        header {
+          padding: 0 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <img
+          class="brand-icon"
+          src="brand/icon.png"
+          alt=""
+          width="32"
+          height="32"
+        />grammai <span class="tag">/ writing room</span>
+      </div>
+      <span class="tag"
+        ><span class="dot"></span>Your words, a little clearer.</span
+      >
+    </header>
+    <main>
+      <section>
+        <div class="eyebrow">A LITTLE SPACE TO THINK</div>
+        <h1>Good writing starts with a first draft.</h1>
+        <div class="paper">
+          <label for="draft">A NOTE TO THE TEAM</label
+          ><textarea id="draft" spellcheck="false" aria-label="Writing editor">
+Hi team,
+
+I wanted to share a quick update on the project. Their are a few things we need to adress before Friday. We was planning to launch yesterday, but the the final review isn't finished.
+
+In order to move forward, please send you're feedback when you have a chance. I definately think we can make this work.
+
+Thanks for all your help!</textarea
+          >
+          <div class="editor-footer">
+            <span>Draft · Saved in this tab</span><span>English</span>
+          </div>
+          <details>
+            <summary>Try a rich text editor, too</summary>
+            <div
+              id="rich"
+              contenteditable="true"
+              role="textbox"
+              aria-label="Rich text editor"
+            >
+              This is <strong>realy</strong> important. We has a good plan for
+              the next release.
+            </div>
+          </details>
+        </div>
+      </section>
+      <aside class="sidebar">
+        <h2>A second pair of eyes.</h2>
+        <p>
+          Hover over an underlined word and click it to review a correction.
+          Select text to rewrite or translate. Press ⌘/Ctrl + Shift + Y to open
+          grammai, or Alt + ↓ to review the next correction.
+        </p>
+        <hr />
+        <h2>Made for your workflow</h2>
+        <p>
+          Spelling & grammar<br />Clarity & concision<br />Personal
+          dictionary<br />Controls for every website
+        </p>
+        <hr />
+        <p class="small">
+          grammai is an independent writing assistant. Spelling runs on your
+          device. Rewrites use your installed Claude or Codex CLI.
+        </p>
+      </aside>
+    </main>
+  </body>
+</html>

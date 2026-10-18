@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Help · grammai</title>
+    <link rel="stylesheet" href="ui.css" />
+    <link rel="stylesheet" href="help.css" />
+  </head>
+  <body>
+    <header class="app-header help-header">
+      <a class="brand" href="help.html"
+        ><img
+          class="brand-icon"
+          src="brand/icon.png"
+          alt=""
+          width="30"
+          height="30"
+        /><span>grammai</span></a
+      >
+      <a href="options.html">Settings</a>
+    </header>
+    <main class="help-main">
+      <div class="help-intro">
+        <span class="eyebrow">Free. Private. Ready to write.</span>
+        <h1>Install. Start writing.</h1>
+        <p>
+          English and German spelling and grammar run directly in grammai. Open
+          a text field and start writing. No account or extra installation
+          needed.
+        </p>
+        <a class="button primary" href="demo.html" target="_blank"
+          >Try the writing room</a
+        >
+      </div>
+      <div class="help-layout">
+        <div>
+          <section
+            class="help-step"
+            id="german"
+            aria-labelledby="checking-heading"
+          >
+            <span class="step-number" aria-hidden="true">✓</span>
+            <div>
+              <h2 id="checking-heading">Your checker is already included.</h2>
+              <p>
+                grammai detects English and German automatically. Corrections
+                appear as underlines; click a marked word to review it. Checking
+                stays on your device and works offline.
+              </p>
+              <p class="help-muted">
+                The German checker may take a few seconds to prepare the first
+                time you write in German.
+              </p>
+            </div>
+          </section>
+          <details class="ai-setup" id="ai">
+            <summary>
+              Your AI
+              <span class="help-muted"
+                >Optional · Rewrite, translate &amp; context</span
+              >
+            </summary>
+            <p class="help-muted">
+              Only AI features use the setup below. Your spelling and grammar
+              checker is ready without it. Your provider’s access requirements
+              and usage limits apply.
+            </p>
+            <div class="provider-picker" role="group" aria-label="AI provider">
+              <button type="button" data-provider="codex" aria-pressed="true">
+                Codex</button
+              ><button
+                type="button"
+                data-provider="claude"
+                aria-pressed="false"
+              >
+                Claude Code
+              </button>
+            </div>
+            <section class="help-step" aria-labelledby="verify-heading">
+              <span class="step-number" aria-hidden="true">↗</span>
+              <div>
+                <h2 id="verify-heading">Your AI connection</h2>
+                <div
+                  class="provider-status"
+                  id="connection-status"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Checking your local AI connection…
+                </div>
+                <button
+                  type="button"
+                  id="check-connection"
+                  class="button primary"
+                >
+                  Check connection
+                </button>
+                <p class="help-muted">
+                  The check detects installed CLIs. A rewrite verifies sign-in
+                  and model access. Choose a provider in
+                  <a href="options.html#ai">AI settings</a>, then
+                  <a href="demo.html" target="_blank">try the writing room</a>.
+                </p>
+              </div>
+            </section>
+            <p id="platform-note" class="platform-note">
+              The optional AI helper currently supports Chrome and Helium on
+              macOS.
+            </p>
+            <button type="button" id="show-setup" class="setup-toggle" hidden>
+              Show setup instructions
+            </button>
+            <div id="ai-installation" hidden>
+              <section
+                class="help-step"
+                id="prepare-step"
+                aria-labelledby="prepare-heading"
+              >
+                <span class="step-number" aria-hidden="true">1</span>
+                <div>
+                  <h2 id="prepare-heading">Prepare your Mac</h2>
+                  <p>
+                    The helper needs Node.js 22 or newer. Already have it? Skip
+                    this step.
+                  </p>
+                  <div class="command-block">
+                    <pre><code id="node-command">brew install node</code></pre>
+                    <button
+                      type="button"
+                      class="copy-command"
+                      data-copy="node-command"
+                      aria-label="Copy Node installation command"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <p class="help-muted">
+                    This command uses
+                    <a
+                      href="https://brew.sh"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >Homebrew</a
+                    >. You can also
+                    <a
+                      href="https://nodejs.org/en/download"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >install Node.js directly</a
+                    >.
+                  </p>
+                </div>
+              </section>
+              <section
+                class="help-step"
+                id="provider-step"
+                aria-labelledby="provider-heading"
+              >
+                <span class="step-number" aria-hidden="true">2</span>
+                <div>
+                  <h2 id="provider-heading">Install or sign in to your AI</h2>
+                  <p>
+                    Complete this step only if your selected CLI is missing or
+                    needs sign-in. Check the connection again afterwards. If a
+                    newly installed CLI is still not found, open setup
+                    instructions and run the helper command to register its
+                    location.
+                  </p>
+
+                  <div class="command-block">
+                    <pre><code id="provider-command"></code></pre>
+                    <button
+                      type="button"
+                      class="copy-command"
+                      data-copy="provider-command"
+                      aria-label="Copy AI installation and sign-in commands"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <p class="help-muted">
+                    Paste into Terminal and complete sign-in in your browser.
+                    <a
+                      id="provider-docs"
+                      href="https://developers.openai.com/codex/cli"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >Official setup instructions ↗</a
+                    >
+                  </p>
+                </div>
+              </section>
+              <section
+                class="help-step"
+                id="helper"
+                aria-labelledby="helper-heading"
+              >
+                <span class="step-number" aria-hidden="true">3</span>
+                <div>
+                  <h2 id="helper-heading">Connect your local AI once</h2>
+                  <p>
+                    This one-time helper connects grammai to your local Codex or
+                    Claude Code CLI for AI actions only. Download the ZIP to
+                    Downloads, then run the command below.
+                  </p>
+                  <a
+                    id="download-helper"
+                    class="button"
+                    href="grammai-helper.zip"
+                    download="grammai-helper.zip"
+                    >Download helper</a
+                  >
+                  <div class="command-block">
+                    <pre><code id="helper-command"></code></pre>
+                    <button
+                      type="button"
+                      class="copy-command"
+                      data-copy="helper-command"
+                      aria-label="Copy grammai helper installation command"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <p class="help-muted">
+                    Already connected? No reinstall is needed for normal
+                    extension updates. Use these instructions only to install,
+                    repair or update the AI helper. If the ZIP was saved
+                    elsewhere, adjust its path.
+                  </p>
+                </div>
+              </section>
+              <section
+                class="help-troubleshooting"
+                aria-labelledby="troubleshooting-heading"
+              >
+                <h2 id="troubleshooting-heading">Need a hand?</h2>
+                <details>
+                  <summary>“Command not found”</summary>
+                  <p>
+                    Open a new Terminal window after installing Node.js or your
+                    CLI. Follow the provider’s official instructions to add it
+                    to PATH if necessary. Then run the helper installation
+                    command again.
+                  </p>
+                </details>
+                <details>
+                  <summary>“Local helper is not connected”</summary>
+                  <p>
+                    Download the current helper and run step 3 from this page.
+                    Its command contains the ID of the extension you are using,
+                    so a Store installation and a development installation can
+                    need different registrations.
+                  </p>
+                </details>
+                <details>
+                  <summary>The CLI is found, but rewrites fail</summary>
+                  <p>
+                    Sign in again using the command in step 2 and check your
+                    provider’s account limits. grammai uses that account; it
+                    does not include an AI subscription. If an optional model is
+                    set in AI settings, clear it to use the CLI’s default for
+                    rewrites.
+                  </p>
+                </details>
+                <details>
+                  <summary>I’m on Windows or Linux</summary>
+                  <p>
+                    The optional AI helper installer currently supports macOS.
+                    English and German checking work directly in the extension
+                    on all supported desktop systems.
+                  </p>
+                </details>
+              </section>
+            </div>
+          </details>
+        </div>
+        <aside class="help-aside">
+          <h2>Your writing stays local.</h2>
+          <p>
+            Spelling and grammar checks run in your browser. Your text is not
+            sent to a server for checking.
+          </p>
+          <p>
+            Requested AI actions send the selected passage—or the whole active
+            field without a selection—to your chosen provider. Ordinary grammar
+            checking stays on your device.
+          </p>
+          <div id="feedback-link"></div>
+          <p class="help-muted">
+            <a href="privacy.html" target="_blank">Privacy policy</a>
+          </p>
+          <p class="help-muted">
+            <a href="licenses/grammai-grammar.txt" target="_blank"
+              >Grammar engines &amp; open-source notices</a
+            >
+          </p>
+          <p class="help-muted">
+            Your mail app opens a draft to grammai@zaapp.io. No writing or page
+            content is attached automatically.
+          </p>
+        </aside>
+      </div>
+      <p
+        id="copy-status"
+        class="visually-hidden"
+        role="status"
+        aria-live="polite"
+      ></p>
+    </main>
+    <script src="help.js" defer></script>
+  </body>
+</html>

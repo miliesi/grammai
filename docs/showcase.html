@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>grammai — sample draft</title
+  ><style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #f7f7f6;
+      color: #171717;
+      font:
+        15px/1.5 -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 36px 64px 26px;
+    }
+    header img {
+      width: 35px;
+      height: 35px;
+      border-radius: 9px;
+    }
+    header strong {
+      font-size: 25px;
+      letter-spacing: -1px;
+    }
+    header span {
+      margin-left: auto;
+      font-size: 12px;
+      color: #737373;
+    }
+    h1 {
+      font-size: 42px;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      margin: 0 64px 12px;
+      max-width: 1140px;
+      font-weight: 650;
+    }
+    .intro {
+      margin: 0 64px 32px;
+      color: #737373;
+      font-size: 16px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 620px 1fr;
+      gap: 60px;
+      margin: 0 64px;
+    }
+    .paper {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 16px;
+      padding: 26px 30px;
+      box-shadow: 0 8px 30px #00000004;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      color: #737373;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      font-weight: 550;
+    }
+    textarea {
+      font:
+        21px/1.75 Georgia,
+        serif;
+      display: block;
+      resize: none;
+      background: transparent;
+      color: inherit;
+      width: 100%;
+      height: 278px;
+      padding: 0;
+      border: 0;
+      outline: none;
+    }
+    .paper small {
+      display: block;
+      border-top: 1px solid #eee;
+      padding-top: 18px;
+      color: #999;
+      font-size: 11px;
+    }
+    .aside {
+      padding-top: 14px;
+      color: #999;
+      font-size: 12px;
+      max-width: 235px;
+    }
+    .aside p {
+      margin: 0 0 20px;
+    }
+    footer {
+      margin: 32px 64px;
+      color: #999;
+      font-size: 11px;
+    }
+    .dark {
+      background: #101010;
+      color: #ededed;
+    }
+    .dark .paper {
+      background: #191919;
+      border-color: #343434;
+    }
+    .dark .paper small {
+      border-color: #343434;
+    }
+    .dark .intro,
+    .dark header span,
+    .dark label {
+      color: #a1a1a1;
+    }
+  </style>
+  <header>
+    <img src="/brand/icon.png" alt="" /><strong>grammai</strong
+    ><span>Free &amp; open source · GPL 3.0</span>
+  </header>
+  <h1>Write clearly. Keep checking local.</h1>
+  <p class="intro">
+    English and German spelling and grammar, right where you write.
+  </p>
+  <main>
+    <section class="paper">
+      <label for="draft">SAMPLE DRAFT</label
+      ><textarea id="draft" aria-label="Writing editor" spellcheck="false">
+Hi team,
+
+Please send you're feedback when you have a chance. I definately think we can make this work.
+
+Thanks for your help!</textarea
+      ><small>Sample text · No account or personal information shown</small>
+    </section>
+    <aside class="aside">
+      <p>Spelling and grammar work offline.</p>
+      <p>Optional AI uses your own Claude Code or Codex account.</p>
+    </aside>
+  </main>
+  <footer>grammai · Your writing, your control.</footer>
+</html>

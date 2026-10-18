@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>grammai settings</title>
+    <link rel="stylesheet" href="ui.css" />
+  </head>
+  <body class="popup-page">
+    <header class="app-header">
+      <a
+        class="brand"
+        href="options.html"
+        target="_blank"
+        aria-label="grammai settings"
+        ><img
+          class="brand-icon"
+          src="brand/icon.png"
+          alt=""
+          width="30"
+          height="30"
+        /><span>grammai</span></a
+      >
+    </header>
+    <main class="popup-main">
+      <div class="section-heading">
+        <h1>Settings</h1>
+        <a href="options.html" target="_blank">All settings</a>
+      </div>
+      <section class="setting-section" aria-label="Checking">
+        <label class="setting-row"
+          ><span class="setting-copy"
+            ><span class="setting-title">Check my writing</span
+            ><span class="setting-help">Suggestions as you type</span></span
+          ><input id="enabled" class="switch" type="checkbox" role="switch"
+        /></label>
+        <label class="setting-row site-setting"
+          ><span class="setting-copy"
+            ><span class="setting-title">Allow on this website</span
+            ><span id="current-site" class="setting-help"
+              >Finding your current tab…</span
+            ></span
+          ><input
+            id="site-enabled"
+            class="switch"
+            type="checkbox"
+            role="switch"
+        /></label>
+      </section>
+      <section
+        class="setting-section category-section"
+        aria-labelledby="suggestion-heading"
+      >
+        <h2 id="suggestion-heading">Writing suggestions</h2>
+        <label class="setting-row"
+          ><span class="setting-copy"
+            ><span class="setting-title"
+              ><i class="category-dot correctness" aria-hidden="true"></i
+              >Correctness</span
+            ><span class="setting-help">Spelling and grammar</span></span
+          ><input
+            class="switch category-toggle"
+            data-category="correctness"
+            type="checkbox"
+            role="switch"
+        /></label>
+        <label class="setting-row"
+          ><span class="setting-copy"
+            ><span class="setting-title"
+              ><i class="category-dot clarity" aria-hidden="true"></i
+              >Clarity</span
+            ><span class="setting-help">Concise, readable sentences</span></span
+          ><input
+            class="switch category-toggle"
+            data-category="clarity"
+            type="checkbox"
+            role="switch"
+        /></label>
+        <label class="setting-row"
+          ><span class="setting-copy"
+            ><span class="setting-title"
+              ><i class="category-dot engagement" aria-hidden="true"></i
+              >Engagement</span
+            ><span class="setting-help">More specific word choices</span></span
+          ><input
+            class="switch category-toggle"
+            data-category="engagement"
+            type="checkbox"
+            role="switch"
+        /></label>
+        <label class="setting-row"
+          ><span class="setting-copy"
+            ><span class="setting-title"
+              ><i class="category-dot delivery" aria-hidden="true"></i
+              >Delivery</span
+            ><span class="setting-help"
+              >Thoughtful tone and phrasing</span
+            ></span
+          ><input
+            class="switch category-toggle"
+            data-category="delivery"
+            type="checkbox"
+            role="switch"
+        /></label>
+      </section>
+      <p
+        id="status"
+        class="status visually-hidden"
+        role="status"
+        aria-live="polite"
+      ></p>
+    </main>
+    <footer class="popup-footer">
+      <a href="options.html#dictionary" target="_blank">Personal dictionary</a
+      ><a id="writing-room" href="demo.html" target="_blank">Writing room</a>
+    </footer>
+    <footer class="community-footer" aria-label="Community and sponsor">
+      <a
+        href="https://github.com/zilvestro/grammai"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Free &amp; open source ↗</a
+      >
+      <a
+        class="sponsor-link"
+        href="https://affonso.io"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Sponsored by Affonso"
+        ><span>Sponsored by</span
+        ><img
+          src="brand/affonso-mark.svg"
+          alt=""
+          width="16"
+          height="16"
+        /><strong>Affonso</strong></a
+      >
+    </footer>
+    <script src="popup.js" defer></script>
+  </body>
+</html>

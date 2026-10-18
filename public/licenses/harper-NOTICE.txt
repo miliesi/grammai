@@ -1,0 +1,6 @@
+grammai bundles harper.js 2.13.0 and its slim WebAssembly binary.
+Project: https://github.com/Automattic/harper
+Authors: Elijah Potter and Harper contributors (Automattic/harper).
+License: Apache License, Version 2.0; see harper-APACHE-2.0.txt.
+The bundled upstream code and WebAssembly binary are unmodified.
+grammai's adapter, rule configuration and interface are independent code.

@@ -1,0 +1,68 @@
+{
+  "name": "grammai",
+  "version": "0.6.5",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "test:e2e": "node tests/extension.mjs",
+    "demo": "node scripts/serve.mjs",
+    "prepare:dictionaries": "node scripts/prepare-dictionaries.mjs",
+    "install:native": "node scripts/install-native.mjs",
+    "install:languages": "node scripts/install-languages.mjs",
+    "test:native": "node --test tests/native*.test.mjs",
+    "test:ai": "node tests/live-ai.mjs",
+    "test:rewrite": "node tests/rewrite.mjs",
+    "test:editors": "node tests/editor-dom.mjs",
+    "test:live": "node tests/live-checks.mjs",
+    "test:reload": "node tests/context-reload.mjs",
+    "test:word-click": "node tests/word-click.mjs",
+    "test:languages": "node tests/languages-translation.mjs",
+    "test:experience": "node tests/experience.mjs",
+    "test:draft": "node tests/draft-editor.mjs",
+    "test:ux": "node tests/grammai-ux.mjs",
+    "test:onboarding": "node tests/onboarding.mjs",
+    "test:zero-install": "node tests/zero-install.mjs",
+    "package:store": "npm run build && node scripts/package-store.mjs",
+    "package:source": "node scripts/package-source.mjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.24",
+    "@types/node": "^22.0.0",
+    "@types/nspell": "^2.1.6",
+    "draft-js": "0.11.7",
+    "esbuild": "^0.25.0",
+    "fflate": "0.8.3",
+    "playwright": "^1.56.0",
+    "prettier": "3.6.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  },
+  "dependencies": {
+    "dictionary-en": "^4.0.0",
+    "dictionary-en-gb": "^3.0.0",
+    "eld": "2.1.0",
+    "harper.js": "2.13.0",
+    "lingotweaker-data-de": "0.2.8",
+    "lingotweaker-wasm": "0.2.8",
+    "nspell": "^2.1.5"
+  },
+  "overrides": {
+    "draft-js": {
+      "immutable": "3.8.4"
+    }
+  },
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zilvestro/grammai.git"
+  },
+  "homepage": "https://github.com/zilvestro/grammai",
+  "bugs": {
+    "url": "https://github.com/zilvestro/grammai/issues"
+  }
+}

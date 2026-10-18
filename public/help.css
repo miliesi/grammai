@@ -1,0 +1,250 @@
+.help-header {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px 28px;
+}
+.help-header > a:last-of-type {
+  margin-left: auto;
+  font-size: 12px;
+}
+.help-header .theme-toggle {
+  margin-left: 4px;
+}
+.help-main {
+  max-width: 1050px;
+  margin: auto;
+  padding: 56px 28px 80px;
+}
+.help-intro {
+  max-width: 650px;
+  margin-bottom: 32px;
+  scroll-margin-top: 20px;
+}
+.eyebrow {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.help-intro h1 {
+  font-size: 38px;
+  line-height: 1.15;
+  letter-spacing: -1.3px;
+  font-weight: 650;
+  margin: 0 0 16px;
+}
+.help-intro p {
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 12px 0;
+}
+.help-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 640px) minmax(180px, 230px);
+  gap: 54px;
+  align-items: start;
+}
+.help-step {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 13px;
+  border-top: 1px solid var(--line);
+  padding: 24px 0;
+  scroll-margin-top: 16px;
+}
+.step-number {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.help-step h2,
+.help-aside h2,
+.help-troubleshooting h2 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 9px;
+}
+.help-step p,
+.help-aside p,
+.help-troubleshooting p {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 9px 0 13px;
+}
+.help-muted {
+  color: var(--muted);
+  font-size: 11px !important;
+}
+.help-muted a,
+.help-aside a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.platform-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 15px;
+}
+.provider-picker {
+  display: flex;
+  gap: 5px;
+  margin: 14px 0 12px;
+}
+.provider-picker button {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 7px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--bg);
+}
+.provider-picker button[aria-pressed="true"] {
+  color: var(--fg);
+  background: var(--subtle);
+  border-color: var(--muted);
+}
+.command-block {
+  position: relative;
+  background: var(--subtle);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.command-block pre {
+  margin: 0;
+  padding: 14px 66px 14px 13px;
+  font-size: 11px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--fg);
+}
+.command-block code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+.copy-command {
+  position: absolute;
+  right: 7px;
+  top: 9px;
+  padding: 4px 7px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  font-size: 11px;
+  color: var(--muted);
+}
+.copy-command:hover {
+  background: var(--hover);
+  color: var(--fg);
+}
+.provider-status {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 12px 0;
+  white-space: pre-line;
+}
+.help-aside {
+  position: sticky;
+  top: 25px;
+  border-left: 1px solid var(--line);
+  padding-left: 22px;
+}
+.help-aside .feedback-link {
+  display: inline-block;
+  font-size: 12px;
+  margin-top: 8px;
+}
+.help-troubleshooting {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.help-troubleshooting details {
+  margin: 13px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.help-troubleshooting summary {
+  cursor: pointer;
+  color: var(--fg);
+}
+.platform-note.unsupported {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--fg);
+}
+.copy-command:disabled {
+  opacity: 0.4;
+}
+.help-step .button {
+  font-size: 12px;
+  min-height: 33px;
+  padding: 6px 11px;
+}
+.ai-setup {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  scroll-margin-top: 20px;
+}
+.ai-setup > summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+.ai-setup > summary span {
+  display: block;
+  margin: 7px 0 16px 16px;
+  font-weight: 400;
+}
+.setup-toggle {
+  background: transparent;
+  border: 0;
+  padding: 7px 0;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .help-layout {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .help-aside {
+    position: static;
+  }
+  .help-main {
+    padding-top: 34px;
+  }
+  .help-intro h1 {
+    font-size: 30px;
+  }
+  .help-header {
+    padding: 16px 22px;
+  }
+}
+@media (max-width: 430px) {
+  .help-main {
+    padding: 30px 20px 50px;
+  }
+  .help-step {
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .command-block pre {
+    font-size: 10px;
+    padding-right: 58px;
+  }
+  .help-intro h1 {
+    font-size: 28px;
+  }
+}

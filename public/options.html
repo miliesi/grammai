@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>grammai — Writing preferences</title>
+    <link rel="stylesheet" href="ui.css" />
+  </head>
+  <body class="options-page">
+    <header class="app-header options-header">
+      <a class="brand" href="options.html"
+        ><img
+          class="brand-icon"
+          src="brand/icon.png"
+          alt=""
+          width="30"
+          height="30"
+        /><span>grammai</span></a
+      ><a href="demo.html" target="_blank">Open writing room</a>
+    </header>
+    <main class="options-main">
+      <div class="page-heading">
+        <h1>Make room for your voice.</h1>
+        <p>
+          Choose how grammai checks your writing. Changes save automatically.
+        </p>
+      </div>
+      <div class="options-layout">
+        <div class="options-settings">
+          <section class="options-section" aria-labelledby="checking-heading">
+            <h2 id="checking-heading">Writing preferences</h2>
+            <label class="setting-row" for="appearance"
+              ><span class="setting-copy"
+                ><span class="setting-title">Appearance</span></span
+              ><select id="appearance">
+                <option value="system">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select></label
+            >
+            <label class="setting-row"
+              ><span class="setting-copy"
+                ><span class="setting-title">Check my writing</span
+                ><span class="setting-help"
+                  >Show suggestions in supported text fields.</span
+                ></span
+              ><input id="enabled" class="switch" type="checkbox" role="switch"
+            /></label>
+            <label class="setting-row" for="language-mode"
+              ><span class="setting-copy"
+                ><span class="setting-title">Writing language</span
+                ><span class="setting-help"
+                  >Detect German and English automatically, or choose one.</span
+                ></span
+              ><select id="language-mode">
+                <option value="auto">Automatic · DE / EN</option>
+                <option value="de">Deutsch</option>
+                <option value="en">English</option>
+              </select></label
+            >
+            <label class="setting-row" for="dialect"
+              ><span class="setting-copy"
+                ><span class="setting-title">English spelling</span
+                ><span class="setting-help"
+                  >Use the spelling conventions you prefer.</span
+                ></span
+              ><select id="dialect">
+                <option value="en-US">American English</option>
+                <option value="en-GB">British English</option>
+              </select></label
+            >
+          </section>
+          <section class="options-section" aria-labelledby="categories-heading">
+            <h2 id="categories-heading">Writing suggestions</h2>
+            <label class="setting-row"
+              ><span class="setting-copy"
+                ><span class="setting-title"
+                  ><i class="category-dot correctness" aria-hidden="true"></i
+                  >Correctness</span
+                ><span class="setting-help"
+                  >Common spelling, punctuation, and grammar errors.</span
+                ></span
+              ><input
+                class="switch category-toggle"
+                data-category="correctness"
+                type="checkbox"
+                role="switch"
+            /></label>
+            <label class="setting-row"
+              ><span class="setting-copy"
+                ><span class="setting-title"
+                  ><i class="category-dot clarity" aria-hidden="true"></i
+                  >Clarity</span
+                ><span class="setting-help"
+                  >Wordy phrases and sentences that can be simpler.</span
+                ></span
+              ><input
+                class="switch category-toggle"
+                data-category="clarity"
+                type="checkbox"
+                role="switch"
+            /></label>
+            <label class="setting-row"
+              ><span class="setting-copy"
+                ><span class="setting-title"
+                  ><i class="category-dot engagement" aria-hidden="true"></i
+                  >Engagement</span
+                ><span class="setting-help"
+                  >Vague or overused words with more specific
+                  alternatives.</span
+                ></span
+              ><input
+                class="switch category-toggle"
+                data-category="engagement"
+                type="checkbox"
+                role="switch"
+            /></label>
+            <label class="setting-row"
+              ><span class="setting-copy"
+                ><span class="setting-title"
+                  ><i class="category-dot delivery" aria-hidden="true"></i
+                  >Delivery</span
+                ><span class="setting-help"
+                  >Phrases that may sound hesitant or abrupt.</span
+                ></span
+              ><input
+                class="switch category-toggle"
+                data-category="delivery"
+                type="checkbox"
+                role="switch"
+            /></label>
+          </section>
+          <section class="options-section" aria-labelledby="shortcuts-heading">
+            <h2 id="shortcuts-heading">Keyboard shortcuts</h2>
+            <div id="keyboard-shortcuts"></div>
+            <p class="shortcuts-note">
+              Translate and Rewrite use your selection, or the whole field.
+              Change browser shortcuts in your browser’s extension shortcuts
+              settings.
+            </p>
+          </section>
+          <section id="ai" class="options-section" aria-labelledby="ai-heading">
+            <h2 id="ai-heading">Bring your own AI</h2>
+            <p class="section-description">
+              Rewrites and translations use your installed CLI and its signed-in
+              account. Your selection, or the whole field without a selection,
+              is sent to that provider. Live checking stays on device.
+            </p>
+            <label class="setting-row" for="ai-provider"
+              ><span class="setting-copy"
+                ><span class="setting-title">Rewrite provider</span
+                ><span class="setting-help"
+                  >Choose the AI tool for rewrites and translations.</span
+                ></span
+              ><select id="ai-provider">
+                <option value="auto">Automatic</option>
+                <option value="claude">Claude Code</option>
+                <option value="codex">Codex</option>
+              </select></label
+            >
+            <label class="setting-row ai-model-row" for="ai-model"
+              ><span class="setting-copy"
+                ><span class="setting-title">Model (optional)</span
+                ><span class="setting-help"
+                  >Rewrites use this model or your CLI's default. Translation
+                  uses Haiku 5.5 or GPT-6 Luna for speed and cost.</span
+                ></span
+              ><input
+                id="ai-model"
+                class="text-input"
+                type="text"
+                placeholder="CLI default"
+                maxlength="160"
+                autocomplete="off"
+                spellcheck="false"
+            /></label>
+            <p class="section-description ai-setup-note">
+              grammai is free. AI features use your own Claude Code or Codex
+              account.
+              <a href="help.html#ai" target="_blank"
+                >Setup guide &amp; copyable commands ↗</a
+              >
+            </p>
+            <button id="ai-test" class="button" type="button">
+              Test AI connection
+            </button>
+            <div
+              id="ai-status"
+              class="status ai-status"
+              role="status"
+              aria-live="polite"
+            >
+              Test the connection to check whether your AI tools are available.
+            </div>
+          </section>
+          <section class="options-section" aria-labelledby="prompts-heading">
+            <h2 id="prompts-heading">Your rewrite prompts</h2>
+            <p class="section-description">
+              Save your voice, tone or recurring instructions. Your prompts
+              appear in every Rewrite menu.
+            </p>
+            <div id="custom-prompts"></div>
+          </section>
+          <section
+            id="dictionary"
+            class="options-section"
+            aria-labelledby="dictionary-heading"
+          >
+            <h2 id="dictionary-heading">Personal dictionary</h2>
+            <p class="section-description">
+              Add names or words you use often. grammai will leave them as you
+              wrote them.
+            </p>
+            <form id="dictionary-form" class="dictionary-form">
+              <label class="visually-hidden" for="dictionary-word"
+                >Word to add</label
+              ><input
+                id="dictionary-word"
+                type="text"
+                placeholder="Add a word"
+                autocomplete="off"
+                maxlength="80"
+                required
+              /><button class="button primary" type="submit">Add word</button>
+            </form>
+            <p id="dictionary-empty" class="empty-state">
+              Your dictionary is empty. Add a name or a word to get started.
+            </p>
+            <ul
+              id="dictionary-list"
+              class="word-list"
+              aria-label="Dictionary words"
+            ></ul>
+          </section>
+          <section class="options-section" aria-labelledby="sites-heading">
+            <h2 id="sites-heading">Paused websites</h2>
+            <p class="section-description">
+              grammai stays quiet on these websites. Resume checking whenever
+              you like.
+            </p>
+            <p id="sites-empty" class="empty-state">
+              No paused websites. You can pause any website from the grammai
+              popup.
+            </p>
+            <ul
+              id="sites-list"
+              class="site-list"
+              aria-label="Paused websites"
+            ></ul>
+          </section>
+          <p
+            id="status"
+            class="status options-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </div>
+        <aside class="local-note">
+          <span class="local-badge"
+            ><span aria-hidden="true"></span>Local checker</span
+          >
+          <h2>On-device checking. AI when you ask.</h2>
+          <p>
+            Spelling and writing checks run on your device. AI rewrites and
+            translations use the selected provider through your installed CLI
+            and signed-in account.
+          </p>
+          <p>
+            Only request a rewrite or translation for text you want to send to
+            that provider. Rewrites show a preview. Translation replaces your
+            text directly; use Undo to restore the original.
+          </p>
+          <a href="demo.html" target="_blank">Try the writing room</a>
+          <p><a href="help.html" target="_blank">Help &amp; setup</a></p>
+          <p><a href="privacy.html" target="_blank">Privacy policy</a></p>
+          <div id="feedback-link"></div>
+          <footer class="community-footer" aria-label="Community and sponsor">
+            <a
+              href="https://github.com/zilvestro/grammai"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Free &amp; open source ↗</a
+            >
+            <a
+              class="sponsor-link"
+              href="https://affonso.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Sponsored by Affonso"
+              ><span>Sponsored by</span
+              ><img
+                src="brand/affonso-mark.svg"
+                alt=""
+                width="16"
+                height="16"
+              /><strong>Affonso</strong></a
+            >
+          </footer>
+        </aside>
+      </div>
+    </main>
+    <script src="options.js" defer></script>
+  </body>
+</html>
