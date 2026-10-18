@@ -1,40 +1,62 @@
 <!doctype html>
-<html>
-  <meta charset="utf-8" /><title>grammai</title
-  ><style>
-    * {
-      box-sizing: border-box;
-    }
+<html lang="en">
+  <meta charset="utf-8" /><title>grammai — Chrome Store promotional tile</title>
+  <style>
     body {
       margin: 0;
-      width: 440px;
-      height: 280px;
       background: #111;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    img {
-      width: 82px;
-      height: 82px;
-      object-fit: contain;
-      margin-bottom: 8px;
+    canvas {
+      display: block;
     }
-    strong {
-      font-size: 45px;
-      font-weight: 700;
-      letter-spacing: -2px;
-      line-height: 1.15;
-    }
-    p {
-      margin: 16px 0 0;
-      font-size: 13px;
-      color: #aaa;
-      letter-spacing: 0.2px;
-    }</style
-  ><img src="/brand/icon.png" alt="" /><strong>grammai</strong>
-  <p>Free. Private. Open source.</p>
+  </style>
+  <canvas
+    aria-label="grammai. AI writing assistance. Free and open source."
+  ></canvas>
+  <script>
+    (async () => {
+      const large =
+        new URLSearchParams(location.search).get("size") === "large";
+      const canvas = document.querySelector("canvas");
+      canvas.width = large ? 1400 : 440;
+      canvas.height = large ? 560 : 280;
+      const ctx = canvas.getContext("2d", { alpha: false });
+      ctx.fillStyle = "#111";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const logo = new Image();
+      logo.src = "/brand/icon.png";
+      await logo.decode();
+      const font =
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
+      ctx.fillStyle = "#fff";
+      if (large) {
+        ctx.drawImage(logo, 188, 144, 120, 120);
+        ctx.textAlign = "center";
+        ctx.font = "700 72px " + font;
+        ctx.letterSpacing = "-3px";
+        ctx.fillText("grammai", 248, 352);
+        ctx.textAlign = "left";
+        ctx.letterSpacing = "-2px";
+        ctx.font = "650 60px " + font;
+        ctx.fillText("AI writing assistance.", 508, 223);
+        ctx.fillText("Free & open source.", 508, 301);
+        ctx.letterSpacing = "0px";
+        ctx.fillStyle = "#aaa";
+        ctx.font = "400 24px " + font;
+        ctx.fillText("Grammar, rewrites & translation.", 508, 371);
+      } else {
+        ctx.drawImage(logo, 179, 57, 82, 82);
+        ctx.textAlign = "center";
+        ctx.font = "700 45px " + font;
+        ctx.letterSpacing = "-2px";
+        ctx.fillText("grammai", 220, 184);
+        ctx.letterSpacing = "0.2px";
+        ctx.fillStyle = "#aaa";
+        ctx.font = "400 13px " + font;
+        ctx.fillText("Free. Private. Open source.", 220, 225);
+      }
+      window.promoPng = canvas.toDataURL("image/png");
+      window.promoReady = true;
+    })();
+  </script>
 </html>

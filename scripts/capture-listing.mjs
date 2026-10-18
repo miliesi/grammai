@@ -26,7 +26,7 @@ const server = http.createServer(async (req, res) => {
     const file =
       req.url === "/brand/icon.png"
         ? "public/brand/icon.png"
-        : req.url === "/promo"
+        : req.url?.startsWith("/promo")
           ? "docs/store/promo.html"
           : "docs/showcase.html";
     res.setHeader(
@@ -209,8 +209,17 @@ try {
   await capture("05-your-ai");
   await page.setViewportSize({ width: 440, height: 280 });
   await page.goto(url + "promo");
+  await page.waitForFunction(() => window.promoReady === true);
   await page.screenshot({
     path: "docs/store/promo-440x280.png",
+    animations: "disabled",
+  });
+
+  await page.setViewportSize({ width: 1400, height: 560 });
+  await page.goto(url + "promo?size=large");
+  await page.waitForFunction(() => window.promoReady === true);
+  await page.screenshot({
+    path: "docs/store/promo-1400x560.png",
     animations: "disabled",
   });
 

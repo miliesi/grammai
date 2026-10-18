@@ -61,7 +61,7 @@ grammai is independent and is not affiliated with Grammarly, LanguageTool, Anthr
 
 ## Visual assets
 
-Upload the five PNGs in `docs/screenshots/` (1280 × 800), the small promotional tile `promo-440x280.png` (440 × 280), and `public/icons/128.png` (128 × 128). Screenshots show genuine extension UI with synthetic example drafts, not a personal account. The rewrite was generated through a real CLI request.
+Upload the five PNGs in `docs/screenshots/` (1280 × 800), the small promotional tile `promo-440x280.png` (440 × 280), the large promotional tile `promo-1400x560.png` (1400 × 560), and `public/icons/128.png` (128 × 128). Both promotional tiles are 24-bit RGB PNGs without alpha. Screenshots show genuine extension UI with synthetic example drafts, not a personal account. The rewrite was generated through a real CLI request.
 
 ## Permission explanations / single purpose
 

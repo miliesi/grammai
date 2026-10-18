@@ -48,7 +48,7 @@ The canonical public repository is https://github.com/zilvestro/grammai. Origina
 
 ## Listing and screenshots
 
-Copy the English listing and permission explanations from [Store listing](store/listing-en.md). Upload `docs/screenshots/*.png`, `docs/store/promo-440x280.png` and `public/icons/128.png`. See the official [Store image requirements](https://developer.chrome.com/docs/webstore/images).
+Copy the English listing and permission explanations from [Store listing](store/listing-en.md). Upload `docs/screenshots/*.png`, `docs/store/promo-440x280.png`, `docs/store/promo-1400x560.png` and `public/icons/128.png`. See the official [Store image requirements](https://developer.chrome.com/docs/webstore/images).
 
 `scripts/capture-listing.mjs` reproduces genuine screenshots in an isolated macOS Helium profile. It requires a locally installed, signed-in Codex or Claude Code CLI for the rewrite image and consumes one normal AI request using sample text. It never captures the live personal browser. The promotional tile is code-native HTML in `docs/store/promo.html`.
 
