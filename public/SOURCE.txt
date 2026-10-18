@@ -1,4 +1,4 @@
-grammai 0.6.5 — Free & open source
+grammai 0.6.6 — Free & open source
 Original grammai code: GPL-3.0-only. See licenses/grammai-GPL-3.0.txt.
 Source and build instructions: https://github.com/zilvestro/grammai
 Bundled engines and dictionaries retain their upstream licenses; see licenses/.

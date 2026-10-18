@@ -141,6 +141,14 @@ for (const name of [
   ...manifest.web_accessible_resources.flatMap((item) => item.resources),
 ])
   if (!entries[name]) throw new Error(`Missing packaged resource: ${name}`);
+// Chrome rejects any second file named manifest.json, even license metadata.
+const manifestFiles = Object.keys(entries).filter(
+  (name) => path.posix.basename(name).toLowerCase() === "manifest.json",
+);
+if (manifestFiles.length !== 1 || manifestFiles[0] !== "manifest.json")
+  throw new Error(
+    `Store package must contain exactly one root manifest.json: ${manifestFiles.join(", ")}`,
+  );
 const zip = zipSync(entries, { level: 9 });
 const verified = unzipSync(zip);
 if (
@@ -175,6 +183,7 @@ await writeFile(
       sourceMaps: 0,
       imageMetadataRemoved: true,
       manifestAtRoot: true,
+      manifestCount: manifestFiles.length,
       note: "Automated marker/pattern audit; no browser profiles, user settings, credentials or test artifacts are packaged. Public support contact and third-party license attributions are retained.",
     },
     null,

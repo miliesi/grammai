@@ -81,7 +81,7 @@ Install the submitted ZIP. No account or native helper is needed to test ordinar
 
 Optional AI is clearly separate. On macOS, use your own signed-in official CLI and follow All settings → Help & setup → Your AI. The extension contains the helper ZIP; no developer credentials or account are supplied. Grammar remains available when no helper is installed.
 
-All executable code, WASM and language resources are bundled. No remote hosted code is used. The source and dependency notices are public at the repository above. A source archive with the pinned upstream engine/data source accompanies v0.6.5.
+All executable code, WASM and language resources are bundled. No remote hosted code is used. The source and dependency notices are public at the repository above. A source archive with the pinned upstream engine/data source accompanies v0.6.6.
 
 ## Data disclosure notes (complete Dashboard truthfully)
 

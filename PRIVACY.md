@@ -1,6 +1,6 @@
 # grammai privacy policy
 
-Last updated: 18 October 2026 · Extension version 0.6.5
+Last updated: 18 October 2026 · Extension version 0.6.6
 
 grammai is a writing assistant for spelling, grammar, rewrites and translation. Privacy questions and requests can be sent to [grammai@zaapp.io ](mailto:grammai@zaapp.io).
 

@@ -47,6 +47,6 @@ for (let index = 0; index < pack.readUInt32LE(5); index++) {
   }
 }
 await writeFile(
-  "dist/licenses/german-data/manifest.json",
+  "dist/licenses/german-data/data-notices.json",
   JSON.stringify({ ...manifest, notices }, null, 2),
 );

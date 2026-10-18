@@ -22,7 +22,7 @@ Keep `package.json`, `package-lock.json` and `public/manifest.json` versions in 
 node scripts/package-store.mjs --output /path/to/grammai-VERSION-chrome-store.zip
 ```
 
-The archive has `manifest.json` at its root. The packager includes only the built runtime, strips development source maps and ancillary PNG metadata, inspects nested helper files and the decompressed German pack, and records an audit under `artifacts/`. It rejects private machine markers and common credential patterns. Public license attributions and the support email remain included. The packager refuses to overwrite an existing ZIP.
+The archive contains exactly one file named `manifest.json`, at its root. German license metadata uses `licenses/german-data/data-notices.json`; a second manifest anywhere in the archive causes Chrome Web Store uploads to fail. The packager rejects this before writing a ZIP. The packager includes only the built runtime, strips development source maps and ancillary PNG metadata, inspects nested helper files and the decompressed German pack, and records an audit under `artifacts/`. It rejects private machine markers and common credential patterns. Public license attributions and the support email remain included. The packager refuses to overwrite an existing ZIP.
 
 Extract the resulting ZIP and test that exact artifact in a fresh browser profile:
 
