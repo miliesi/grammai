@@ -10,6 +10,8 @@ const enabled = document.querySelector<HTMLInputElement>("#enabled")!;
 const dialect = document.querySelector<HTMLSelectElement>("#dialect")!;
 const languageMode =
   document.querySelector<HTMLSelectElement>("#language-mode")!;
+const translatePartner =
+  document.querySelector<HTMLSelectElement>("#translate-partner")!;
 const aiProvider = document.querySelector<HTMLSelectElement>("#ai-provider")!;
 const aiModel = document.querySelector<HTMLInputElement>("#ai-model")!;
 const aiTest = document.querySelector<HTMLButtonElement>("#ai-test")!;
@@ -58,6 +60,7 @@ function render(): void {
   enabled.checked = settings.enabled;
   dialect.value = settings.dialect;
   languageMode.value = settings.languageMode;
+  translatePartner.value = settings.translatePartner;
   aiProvider.value = settings.aiProvider;
   // Keep an unfinished model edit when another preference changes.
   if (document.activeElement !== aiModel) aiModel.value = settings.aiModel;
@@ -127,6 +130,11 @@ dialect.addEventListener("change", () =>
 );
 languageMode.addEventListener("change", () =>
   save({ languageMode: languageMode.value as Settings["languageMode"] }),
+);
+translatePartner.addEventListener("change", () =>
+  save({
+    translatePartner: translatePartner.value as Settings["translatePartner"],
+  }),
 );
 aiProvider.addEventListener("change", () => {
   save({ aiProvider: aiProvider.value as Settings["aiProvider"] });

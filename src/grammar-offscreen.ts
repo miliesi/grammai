@@ -10,7 +10,7 @@ const pending = new Map<
 >();
 const failure = {
   ok: false,
-  error: "German checking could not start. Reload grammai and try again.",
+  error: "Local checking could not start. Reload grammai and try again.",
 };
 function stop() {
   clearTimeout(idle);
@@ -41,8 +41,12 @@ function getWorker() {
   return worker;
 }
 chrome.runtime.onMessage.addListener((message, _sender, respond) => {
-  if (message.target !== "german-offscreen") return;
-  if (typeof message.text !== "string" || message.text.length > 20000) {
+  if (message.target !== "grammar-offscreen") return;
+  if (
+    typeof message.text !== "string" ||
+    message.text.length > 20000 ||
+    (message.language !== "de" && message.language !== "ro")
+  ) {
     respond(failure);
     return;
   }
@@ -52,6 +56,7 @@ chrome.runtime.onMessage.addListener((message, _sender, respond) => {
   try {
     getWorker().postMessage({
       id,
+      language: message.language,
       text: message.text,
       options: message.options,
     });

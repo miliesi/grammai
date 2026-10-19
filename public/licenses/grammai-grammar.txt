@@ -3,9 +3,9 @@ grammai — bundled grammar engines
 English: Harper 2.13.0 (Apache-2.0), Hunspell/SCOWL dictionaries and nspell.
 Notices and license texts are included alongside this file.
 
-German: LingoTweaker 0.2.8 (LGPL-2.1-or-later), an independent Rust/WebAssembly
+German and Romanian: LingoTweaker 0.2.8 (LGPL-2.1-or-later), an independent Rust/WebAssembly
 port of LanguageTool and its rule data. LingoTweaker is not affiliated with or
-endorsed by LanguageTool. The packaged engine and German data are unmodified.
+endorsed by LanguageTool. The packaged engine and the German and Romanian data are unmodified.
 
 Source for the engine, build instructions and data provenance:
 https://github.com/fiduswriter/LingoTweaker/tree/819dc354224c9087ff486708adfd413ecb45f466
@@ -16,15 +16,17 @@ The WebAssembly binary is a separate, replaceable file: german.wasm.
 Its JS binding is bundled unmodified into german-worker.js from the
 lingotweaker-wasm npm package. The adapter does not change the engine source.
 The German rule/dictionary data stays a separate gzip-compressed pack:
-german.pack.gz. Its editable XML rules and per-file provenance are inside
+german.pack.gz (German) and romanian.pack.gz (Romanian). Their editable XML rules and per-file provenance are inside
 that pack. The container format and tools for extraction/rebuilding are in
 crates/lt-data/src/pack.rs in the source archive above.
 
 German POS data: CC-BY-SA-4.0 (Morphy-derived, Daniel Naber).
 German Hunspell dictionary: GPL-2.0-or-later OR GPL-3.0-or-later
 (igerman98/frami). Compound word lists: Apache-2.0 (Sven Abels / Daniel Naber).
+Romanian Hunspell dictionary: GPL-2.0 / LGPL-2.1 / MPL-1.1 tri-license (rospell).
+Romanian POS data: LGPL (Ionuț Păduraru).
 Other rule resources retain their upstream licenses.
 
 See lingotweaker-THIRD_PARTY_NOTICES.md for full attributions and provenance,
-lingotweaker-LGPL-2.1.txt for the engine license, and german-data/ for the
+lingotweaker-LGPL-2.1.txt for the engine license, and german-data/ and romanian-data/ for the
 README/copyright/license files extracted verbatim from the shipped data pack.

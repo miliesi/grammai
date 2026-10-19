@@ -6,16 +6,16 @@ grammai – AI Writing Assistant
 
 ## Short description (132-character limit)
 
-Free, open-source English & German grammar checks. Rewrite and translate with your own Claude Code or Codex account.
+Free, open-source English, German & Romanian grammar checks. Rewrite and translate with your own Claude Code or Codex account.
 
 ## Detailed description
 
 AI writing assistance. Free & open source.
 
-grammai helps you catch mistakes, find clearer wording and translate without leaving the text field. The extension is free. English and German spelling and grammar checks run on your device, using engines and dictionaries included in the extension.
+grammai helps you catch mistakes, find clearer wording and translate without leaving the text field. The extension is free. English, German and Romanian spelling and grammar checks run on your device, using engines and dictionaries included in the extension.
 
 CHECK YOUR WRITING, RIGHT WHERE YOU WRITE
-• Automatic English and German detection, with American or British English spelling.
+• Automatic English, German and Romanian detection, with American or British English spelling.
 • Inline spelling and grammar underlines. Hover to highlight, click to review, accept or dismiss.
 • Contextual rules and common word-confusion checks.
 • Personal dictionary, per-site controls and undo for grammai edits.
@@ -23,7 +23,7 @@ CHECK YOUR WRITING, RIGHT WHERE YOU WRITE
 BRING YOUR OWN AI
 • Rewrite for clarity, brevity or tone, with a preview before applying.
 • Save your own named rewrite prompts.
-• Translate between English and German and replace the selection in one action. Undo restores the original.
+• Translate between English and German or Romanian and replace the selection in one action. Undo restores the original.
 • Request an AI context check when you want a broader review.
 
 Optional AI actions use your own installed, signed-in Claude Code or Codex CLI and its account limits. The current local AI connection requires macOS, Node.js 22+ and a one-time helper installation. The built-in guide walks you through it. An AI subscription is not included. Ordinary grammar checks need none of this setup.
@@ -71,7 +71,7 @@ Single purpose: assist writing in supported editable fields through local spelli
 - `activeTab`: identify and communicate with the active editor tab for assistant actions and per-site controls.
 - `sidePanel`: show the writing assistant in Chrome's side panel.
 - `nativeMessaging`: optional, explicit AI requests to the local helper and official CLI. Ordinary checking does not use it.
-- `offscreen`: run the bundled German checking engine in a dedicated worker, without blocking the editor.
+- `offscreen`: run the bundled German and Romanian checking engine in a dedicated worker, without blocking the editor.
 - Content scripts on HTTP/HTTPS pages and optional file pages: detect supported editable fields and place suggestions. File access requires the user's browser-level permission. Password and recognizable sensitive account/payment fields are excluded.
 - `wasm-unsafe-eval` in extension CSP: execute bundled WebAssembly engines. No remote code is loaded.
 

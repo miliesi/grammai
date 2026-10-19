@@ -174,6 +174,28 @@ try {
   pass(
     "switching language clears stale German issues and restores English checking",
   );
+  s = await update("Am mers la şcoală și am scris o propozitie.", "ro");
+  assert(
+    s.issues.some(
+      (i) => i.original === "şcoală" && i.replacements[0] === "școală",
+    ),
+    JSON.stringify(s),
+  );
+  assert(
+    s.issues.some(
+      (i) => i.original === "propozitie" && i.replacements[0] === "propoziție",
+    ),
+    JSON.stringify(s),
+  );
+  assert.deepEqual(
+    (await update("Aceasta este o propoziție corectă.", "ro")).issues,
+    [],
+  );
+  s = await update("We need neseccary changes.", "en");
+  assert(s.issues.some((i) => i.original === "neseccary"));
+  pass(
+    "Romanian diacritics and legacy cedilla corrections initialize offline and coexist with German and English",
+  );
   await options.evaluate(async () => {
     const { settings } = await chrome.storage.local.get("settings");
     await chrome.storage.local.set({
@@ -204,6 +226,10 @@ try {
         type: "CHECK_TEXT",
         text: "This is definately helpful.",
       }),
+      chrome.runtime.sendMessage({
+        type: "CHECK_TEXT",
+        text: "Aceasta este o propozitie gresita.",
+      }),
     ]),
   );
   assert(
@@ -215,8 +241,9 @@ try {
     concurrent[1].issues.some((i) => i.replacements[0] === "einen Fehler"),
   );
   assert(concurrent[2].issues.some((i) => i.replacements[0] === "definitely"));
+  assert(concurrent[3].issues.some((i) => i.replacements[0] === "propoziție"));
   pass(
-    "offscreen restart and concurrent English/German checks work without duplicate initialization",
+    "offscreen restart and concurrent English/German/Romanian checks work without duplicate initialization",
   );
   const help = await context.newPage();
   await help.goto(`chrome-extension://${id}/help.html`);

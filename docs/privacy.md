@@ -2,7 +2,7 @@
 
 ## Ordinary spelling and grammar
 
-A supported editable field is read by the content script. The extension sends a bounded excerpt through its internal messaging system for local checking. English is checked in the background worker; German is checked by the bundled engine in a dedicated worker inside an offscreen document. Suggestions return to the matching editor session.
+A supported editable field is read by the content script. The extension sends a bounded excerpt through its internal messaging system for local checking. English is checked in the background worker; German and Romanian are checked by the bundled engine in a dedicated worker inside an offscreen document. Suggestions return to the matching editor session.
 
 No grammai service, external grammar endpoint or AI request is involved. The extension does not save draft history. Transient suggestions, previews and undo state live in memory and are checked against the editor version before use.
 

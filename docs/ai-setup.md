@@ -45,4 +45,4 @@ Only an explicit AI action sends text to your provider. The helper does not add 
 - **Helper not found:** Run the guide's helper command for the extension ID you are using.
 - **CLI not found:** Install the chosen CLI, then refresh its registration through the guide.
 - **CLI found, action fails:** Check official CLI sign-in, provider usage limits and model availability. Clear an optional rewrite model to use the CLI default.
-- **Windows / Linux:** Local English and German checking works in the extension. The bundled AI helper installer currently supports macOS.
+- **Windows / Linux:** Local English, German and Romanian checking works in the extension. The bundled AI helper installer currently supports macOS.

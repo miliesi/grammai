@@ -204,9 +204,10 @@ export function translationPane(
   const select = el("select", "rewrite-style");
   select.setAttribute("aria-label", "Translation language");
   for (const [value, text] of [
-    ["translate-auto", "English ↔ Deutsch"],
+    ["translate-auto", "Automatic · to or from English"],
     ["translate-en", "English"],
     ["translate-de", "Deutsch"],
+    ["translate-ro", "Română"],
   ]) {
     const option = el("option", "", text);
     option.value = value;

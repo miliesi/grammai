@@ -6,7 +6,7 @@ grammai is a writing assistant for spelling, grammar, rewrites and translation. 
 
 ## Spelling and grammar stay on your device
 
-grammai reads text in supported editable fields to show writing suggestions. English and German spelling and grammar checks, language detection, and suggestion placement run inside the extension on your device, using bundled engines and dictionaries. Ordinary checks do not send your text, page URLs or browsing activity to grammai or another server.
+grammai reads text in supported editable fields to show writing suggestions. English, German and Romanian spelling and grammar checks, language detection, and suggestion placement run inside the extension on your device, using bundled engines and dictionaries. Ordinary checks do not send your text, page URLs or browsing activity to grammai or another server.
 
 The extension uses the current website's hostname for per-site controls. It does not collect browsing history or page contents for advertising or analytics. Password fields and recognizable account and payment fields are excluded from checking; you can also pause grammai globally or on a specific website.
 
