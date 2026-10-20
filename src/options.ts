@@ -310,6 +310,4 @@ chrome.storage.onChanged.addListener(async (changes) => {
   if (changes.settings) settings = await getSettings();
 });
 
-document
-  .querySelector("#feedback-link")!
-  .append(feedbackLink(chrome.runtime.getManifest().version));
+document.querySelector("#feedback-link")!.append(feedbackLink());

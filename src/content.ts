@@ -781,10 +781,7 @@ function closePanel() {
 }
 function assistantFooter() {
   const foot = el("div", "assistant-footer");
-  foot.append(
-    shortcutHelp(),
-    feedbackLink(chrome.runtime.getManifest().version),
-  );
+  foot.append(shortcutHelp(), feedbackLink());
   return foot;
 }
 function shortcutHelp() {

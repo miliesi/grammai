@@ -1,9 +1,39 @@
 import { build } from "esbuild";
 import { mkdir, rm, cp, readFile, writeFile } from "node:fs/promises";
+const feedbackConfig = JSON.parse(
+  await readFile("feedback.config.json", "utf8"),
+);
+const feedbackEndpoint =
+  process.env.GRAMMAI_FEEDBACK_ENDPOINT ?? feedbackConfig.endpoint;
+let feedbackOrigin;
+if (feedbackEndpoint) {
+  const url = new URL(feedbackEndpoint);
+  if (
+    url.protocol !== "https:" ||
+    url.username ||
+    url.password ||
+    url.search ||
+    url.hash ||
+    url.pathname !== "/v1/feedback"
+  )
+    throw new Error(
+      "Feedback endpoint must be an HTTPS URL ending in /v1/feedback, without credentials or query parameters.",
+    );
+  feedbackOrigin = url.origin;
+}
 await import("./prepare-dictionaries.mjs");
 await rm("dist", { recursive: true, force: true });
 await mkdir("dist", { recursive: true });
 await cp("public", "dist", { recursive: true });
+if (feedbackOrigin) {
+  const manifest = JSON.parse(await readFile("dist/manifest.json", "utf8"));
+  manifest.host_permissions = [`${feedbackOrigin}/*`];
+  manifest.content_security_policy.extension_pages += ` ${feedbackOrigin}`;
+  await writeFile(
+    "dist/manifest.json",
+    JSON.stringify(manifest, null, 2) + "\n",
+  );
+}
 await cp(
   "node_modules/harper.js/dist/harper_wasm_slim_bg.wasm",
   "dist/harper_wasm_slim_bg.wasm",
@@ -17,6 +47,7 @@ await build({
     "src/options.ts",
     "src/sidepanel.ts",
     "src/help.ts",
+    "src/feedback.ts",
     "src/german-worker.ts",
     "src/grammar-offscreen.ts",
   ],
@@ -25,7 +56,10 @@ await build({
   format: "iife",
   target: "chrome120",
   // Harper also supports Node. Remove its filesystem loader from the browser build.
-  define: { process: "undefined" },
+  define: {
+    process: "undefined",
+    __FEEDBACK_ENDPOINT__: JSON.stringify(feedbackEndpoint || ""),
+  },
   sourcemap: true,
   legalComments: "none",
 });

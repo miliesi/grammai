@@ -20,9 +20,7 @@ function showRequestedHelp() {
 }
 showRequestedHelp();
 window.addEventListener("hashchange", showRequestedHelp);
-document
-  .querySelector("#feedback-link")!
-  .append(feedbackLink(manifest.version));
+document.querySelector("#feedback-link")!.append(feedbackLink());
 
 let provider: "claude" | "codex" = "codex";
 let providerChanged = false;

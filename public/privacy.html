@@ -36,7 +36,7 @@
   <body>
     <h1>grammai privacy policy</h1>
     <p class="updated">
-      Last updated: 18 October 2026 · Extension version 0.6.6
+      Last updated: 20 October 2026 · Extension version 0.6.6
     </p>
     <p>
       grammai is a writing assistant for spelling, grammar, rewrites and
@@ -47,10 +47,10 @@
     <h2>Spelling and grammar stay on your device</h2>
     <p>
       grammai reads text in supported editable fields to show writing
-      suggestions. English, German and Romanian spelling and grammar checks, language
-      detection, and suggestion placement run inside the extension on your
-      device, using bundled engines and dictionaries. Ordinary checks do not
-      send your text, page URLs or browsing activity to grammai or another
+      suggestions. English, German and Romanian spelling and grammar checks,
+      language detection, and suggestion placement run inside the extension on
+      your device, using bundled engines and dictionaries. Ordinary checks do
+      not send your text, page URLs or browsing activity to grammai or another
       server.
     </p>
     <p>
@@ -104,14 +104,46 @@
 
     <h2>Feedback is sent only when you send it</h2>
     <p>
-      “Send feedback” opens your mail application with a draft addressed to
-      grammai@zaapp.io. Only the extension version is prefilled; your writing,
-      page URL and diagnostics are not attached automatically. If you send the
-      email, grammai support receives your email address, message and anything
-      you add. Support correspondence may be retained as needed to respond and
-      follow up. Contact the same address to request deletion.
+      “Send feedback” opens a bundled form for bugs and ideas. Opening the form
+      makes no external request. When you press <strong>Send feedback</strong>,
+      the title, description and report type you enter, plus the extension
+      version and any screenshots you choose to attach, are sent to grammai's
+      feedback endpoint hosted by Cloudflare. Your editor text, page URL,
+      browsing history and diagnostics are not collected or attached
+      automatically.
+    </p>
+    <p>
+      The endpoint creates a <strong>public GitHub issue</strong> in
+      github.com/zilvestro/grammai using a server-side GitHub App credential.
+      Issues are published under the app bot, not the submitter or a
+      maintainer’s personal account. You do not need a GitHub account and are
+      not redirected to GitHub to submit. Published reports are public under
+      GitHub's own privacy policy. Do not include private text, account details
+      or tokens in the form.
+    </p>
+    <p>
+      Cloudflare processes the request and its network metadata. The endpoint
+      uses the connecting IP for short-lived rate limiting; it does not put IP
+      addresses in GitHub issues or deliberately log report bodies, IPs or
+      credentials. Cloudflare's own data handling also applies.
+    </p>
+    <p>
+      Choosing email opens your mail application with a draft addressed to
+      grammai@zaapp.io. If you send it, grammai support receives your email
+      address, message and anything you add. Support correspondence may be
+      retained as needed to respond and follow up. Contact the same address
+      about your report or to request deletion.
     </p>
 
+    <p>
+      Optional screenshots are redrawn locally as PNG files to remove original
+      filenames and embedded metadata. Opening the screenshot section checks
+      upload availability; selecting an image does not upload it. Submitted
+      images are stored in Cloudflare R2 and publicly readable for display in
+      GitHub. They remain until a maintainer removes them; deleting an issue
+      does not automatically delete its images. Request removal by emailing
+      grammai@zaapp.io with the issue link. Do not attach private content.
+    </p>
     <h2>Sponsorship</h2>
     <p>
       grammai displays a static sponsor link to Affonso. The logo is bundled

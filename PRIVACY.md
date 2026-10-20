@@ -1,6 +1,6 @@
 # grammai privacy policy
 
-Last updated: 18 October 2026 · Extension version 0.6.6
+Last updated: 20 October 2026 · Extension version 0.6.6
 
 grammai is a writing assistant for spelling, grammar, rewrites and translation. Privacy questions and requests can be sent to [grammai@zaapp.io ](mailto:grammai@zaapp.io).
 
@@ -26,7 +26,13 @@ Active checks, suggestion fragments, requested AI previews and undo information 
 
 ## Feedback is sent only when you send it
 
-“Send feedback” opens your mail application with a draft addressed to grammai@zaapp.io. Only the extension version is prefilled; your writing, page URL and diagnostics are not attached automatically. If you send the email, grammai support receives your email address, message and anything you add. Support correspondence may be retained as needed to respond and follow up. Contact the same address to request deletion.
+“Send feedback” opens a bundled form for bugs and ideas. Opening the form makes no external request. When you press **Send feedback**, the title, description and report type you enter, plus the extension version and any screenshots you choose to attach, are sent to grammai's feedback endpoint hosted by Cloudflare. Your editor text, page URL, browsing history and diagnostics are not collected or attached automatically.
+
+The endpoint creates a **public GitHub issue** in github.com/zilvestro/grammai using a server-side GitHub App credential. Issues are published under the app bot, not the submitter or a maintainer’s personal account. You do not need a GitHub account and are not redirected to GitHub to submit. Published reports are public under GitHub's own privacy policy. Do not include private text, account details or tokens in the form.
+
+Cloudflare processes the request and its network metadata. The endpoint uses the connecting IP for short-lived rate limiting; it does not put IP addresses in GitHub issues or deliberately log report bodies, IPs or credentials. Cloudflare's own data handling also applies.
+
+Choosing email opens your mail application with a draft addressed to grammai@zaapp.io. If you send it, grammai support receives your email address, message and anything you add. Support correspondence may be retained as needed to respond and follow up. Contact the same address about your report or to request deletion.
 
 ## Sponsorship
 
@@ -43,3 +49,5 @@ You can disable checking globally or per website, change language preferences, a
 ## Changes
 
 This policy describes the current extension. If data handling changes, the policy and relevant in-product disclosures will be updated before the changed handling is introduced.
+
+Optional screenshots are redrawn on your device as PNG files before submission to remove original filenames and embedded image metadata. Opening the screenshot section checks upload availability with Cloudflare; choosing or previewing an image does not upload it. Attached images are stored in Cloudflare R2 and made publicly readable so GitHub can display them in the issue. Images remain stored until removed by a maintainer; deleting an issue does not automatically delete its images. To request removal, email grammai@zaapp.io with the issue link. Do not attach private or sensitive content.

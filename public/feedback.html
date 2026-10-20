@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Send feedback — grammai</title>
+    <link rel="stylesheet" href="ui.css" />
+    <link rel="stylesheet" href="feedback.css" />
+  </head>
+  <body>
+    <header class="app-header feedback-header">
+      <a class="brand" href="options.html" aria-label="grammai settings">
+        <img
+          class="brand-icon"
+          src="brand/icon.png"
+          alt=""
+          width="30"
+          height="30"
+        />
+        <span>grammai</span>
+      </a>
+      <a href="options.html">Settings</a>
+    </header>
+    <main class="feedback-main">
+      <h1>Help improve grammai.</h1>
+      <p class="feedback-intro">
+        Found a bug or have an idea? Send it straight to the people building
+        grammai.
+      </p>
+      <form id="feedback-form" aria-label="Send feedback">
+        <fieldset id="feedback-fields">
+          <legend class="visually-hidden">Your feedback</legend>
+          <label for="feedback-kind">What would you like to share?</label>
+          <select id="feedback-kind" name="kind">
+            <option value="bug">Report a bug</option>
+            <option value="idea">Suggest an idea</option>
+          </select>
+          <label for="feedback-title">Title</label>
+          <input
+            id="feedback-title"
+            name="title"
+            type="text"
+            required
+            minlength="3"
+            maxlength="120"
+            placeholder="A short summary"
+            autocomplete="off"
+          />
+          <label for="feedback-description">Description</label>
+          <textarea
+            id="feedback-description"
+            name="description"
+            required
+            minlength="10"
+            maxlength="6000"
+            rows="7"
+            placeholder="What happened, and what did you expect? A small example or steps to reproduce will help."
+            aria-describedby="github-note"
+          ></textarea>
+          <details id="feedback-images">
+            <summary>Add screenshots <span>(optional)</span></summary>
+            <p id="image-help" class="feedback-note">
+              Up to 2 images, 2 MB each. PNG, JPEG or WebP. Selected images will
+              be public. Crop out anything private before adding them.
+            </p>
+            <label for="feedback-files" class="visually-hidden"
+              >Screenshots</label
+            >
+            <input
+              id="feedback-files"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              multiple
+              disabled
+              aria-describedby="image-help image-status"
+            />
+            <p
+              id="image-status"
+              class="feedback-note"
+              role="status"
+              aria-live="polite"
+            ></p>
+            <ul id="image-previews" aria-label="Attached screenshots"></ul>
+          </details>
+          <p id="github-note" class="feedback-note">
+            Your feedback will be posted publicly in
+            <a
+              href="https://github.com/zilvestro/grammai/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              >our GitHub issue tracker</a
+            >. No GitHub account needed. Please leave out private text, account
+            details and tokens. Only your message, any images you attach and the
+            grammai version are sent.
+          </p>
+          <button id="send-feedback" class="button" type="submit">
+            Send feedback
+          </button>
+        </fieldset>
+      </form>
+      <p
+        id="feedback-status"
+        class="feedback-note"
+        role="status"
+        aria-live="polite"
+        tabindex="-1"
+      ></p>
+      <section id="feedback-success" hidden aria-labelledby="success-heading">
+        <h2 id="success-heading">Thanks for your feedback.</h2>
+        <p>Your report has been saved. You can stay here and keep writing.</p>
+        <a id="view-issue" target="_blank" rel="noopener noreferrer" hidden
+          >View your report</a
+        >
+        <button id="send-another" class="button" type="button">
+          Send another report
+        </button>
+      </section>
+      <section class="feedback-email" aria-labelledby="email-heading">
+        <h2 id="email-heading">Prefer email?</h2>
+        <p>
+          Or send us an email.
+          <a id="email-feedback" href="mailto:grammai@zaapp.io"
+            >Email grammai@zaapp.io</a
+          >
+        </p>
+      </section>
+      <footer class="feedback-footer">
+        <a
+          href="https://github.com/zilvestro/grammai/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Browse existing issues</a
+        >
+        <span id="extension-version"></span>
+      </footer>
+    </main>
+    <script src="feedback.js" defer></script>
+  </body>
+</html>

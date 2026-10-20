@@ -79,7 +79,7 @@ Browser shortcuts can be changed at `chrome://extensions/shortcuts`. Operating s
 
 Ordinary checks stay inside your browser. grammai includes no analytics, telemetry or automatic crash uploads. Preferences, personal words, saved prompts and paused website hostnames are stored in local extension storage.
 
-An explicit AI action sends the selected text—or the active field without a selection—to your chosen provider through its CLI. Provider terms and account settings apply. Feedback opens an email draft that you send yourself; writing and page URLs are not attached automatically.
+An explicit AI action sends the selected text—or the active field without a selection—to your chosen provider through its CLI. Provider terms and account settings apply. Feedback is sent only when you submit the form; only your message, any screenshots you attach and the extension version are included, and the report is published in our GitHub issue tracker.
 
 Read the [privacy policy](PRIVACY.md) or [data-flow explanation](docs/privacy.md).
 
@@ -97,7 +97,7 @@ Fork this repository, create a branch for your change, and open a pull request a
 
 [Contributing](CONTRIBUTING.md) covers the project layout, tests and how to report editor issues. [Development](docs/development.md) describes the local engines and native helper. [Release preparation](docs/releasing.md) covers Store packaging and publication assets.
 
-Report a problem through **Send feedback** in the assistant or email [grammai@zaapp.io](mailto:grammai@zaapp.io). Include the website/editor, browser and a short, anonymized example. Keep private drafts and account credentials out of reports.
+Use **Send feedback** in the popup, assistant, settings or sidebar to report a bug or suggest an idea directly in the extension. You do not need a GitHub account: pressing Send feedback submits your message through our Cloudflare endpoint and creates a public GitHub issue. You can optionally attach up to two screenshots when image storage is available. Your extension version is included; editor text and page URLs are not attached. Email [grammai@zaapp.io](mailto:grammai@zaapp.io) is also available. The same flow supports unpacked GitHub builds and Store installations. Keep private drafts and account credentials out of reports. Maintainers can configure the endpoint using [the feedback deployment guide](docs/feedback.md).
 
 ## License
 

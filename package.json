@@ -24,6 +24,7 @@
     "test:draft": "node tests/draft-editor.mjs",
     "test:ux": "node tests/grammai-ux.mjs",
     "test:onboarding": "node tests/onboarding.mjs",
+    "test:feedback": "node tests/feedback.mjs",
     "test:zero-install": "node tests/zero-install.mjs",
     "package:store": "npm run build && node scripts/package-store.mjs",
     "package:source": "node scripts/package-source.mjs"
