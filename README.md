@@ -97,7 +97,7 @@ Fork this repository, create a branch for your change, and open a pull request a
 
 [Contributing](CONTRIBUTING.md) covers the project layout, tests and how to report editor issues. [Development](docs/development.md) describes the local engines and native helper. [Release preparation](docs/releasing.md) covers Store packaging and publication assets.
 
-Report a problem through **Send feedback** in the assistant or email [grammai@zaapp.io](mailto:grammai@zaapp.io). Include the website/editor, browser and a short, anonymized example. Keep private drafts and account credentials out of reports.
+Use **Send feedback** in the popup, assistant, settings or sidebar to report a bug or suggest an idea on GitHub. The matching issue draft includes your extension version and opens for you to edit and submit. GitHub reports are public and require an account; email [grammai@zaapp.io](mailto:grammai@zaapp.io) is also available. This works for both unpacked GitHub builds and Store installations. Include the website/editor, browser and a short, anonymized example. Keep private drafts and account credentials out of reports.
 
 ## License
 

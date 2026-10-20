@@ -1,4 +1,5 @@
 import { initializePageTheme } from "./theme";
+import { feedbackLink } from "./support";
 import { getSettings, updateSettings, type Settings } from "./shared";
 
 type Category = keyof Settings["categories"];
@@ -88,6 +89,7 @@ for (const toggle of categoryToggles) {
 }
 document.querySelector<HTMLAnchorElement>("#writing-room")!.href =
   chrome.runtime.getURL("demo.html");
+document.querySelector("#feedback-link")!.append(feedbackLink());
 void initialize();
 
 void initializePageTheme();

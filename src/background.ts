@@ -169,6 +169,12 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
         }),
       );
     return true;
+  } else if (message.type === "OPEN_FEEDBACK") {
+    chrome.tabs
+      .create({ url: chrome.runtime.getURL("feedback.html") })
+      .then(() => respond({ ok: true }))
+      .catch(() => respond({ ok: false }));
+    return true;
   } else if (message.type === "OPEN_HELP") {
     const topic = message.topic === "german" ? "german" : "ai";
     chrome.tabs

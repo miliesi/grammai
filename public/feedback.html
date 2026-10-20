@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Send feedback — grammai</title>
+    <link rel="stylesheet" href="ui.css" />
+    <link rel="stylesheet" href="feedback.css" />
+  </head>
+  <body>
+    <header class="app-header feedback-header">
+      <a class="brand" href="options.html" aria-label="grammai settings">
+        <img
+          class="brand-icon"
+          src="brand/icon.png"
+          alt=""
+          width="30"
+          height="30"
+        />
+        <span>grammai</span>
+      </a>
+      <a href="options.html">Settings</a>
+    </header>
+    <main class="feedback-main">
+      <h1>Help improve grammai.</h1>
+      <p class="feedback-intro">
+        Found something that doesn't work? Have an idea for better writing? We'd
+        like to hear it.
+      </p>
+      <nav class="feedback-actions" aria-label="Share feedback on GitHub">
+        <a
+          id="report-bug"
+          class="feedback-action"
+          href="https://github.com/zilvestro/grammai/issues/new?template=bug_report.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-labelledby="bug-title"
+          aria-describedby="github-note"
+        >
+          <span
+            ><strong id="bug-title">Report a bug</strong
+            ><span>Tell us what happened and what you expected.</span></span
+          >
+          <span class="feedback-destination" aria-hidden="true">GitHub ↗</span>
+        </a>
+        <a
+          id="suggest-idea"
+          class="feedback-action"
+          href="https://github.com/zilvestro/grammai/issues/new?template=feature_request.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-labelledby="idea-title"
+          aria-describedby="github-note"
+        >
+          <span
+            ><strong id="idea-title">Suggest an idea</strong
+            ><span
+              >Share a feature or a small change that would help.</span
+            ></span
+          >
+          <span class="feedback-destination" aria-hidden="true">GitHub ↗</span>
+        </a>
+      </nav>
+      <p id="github-note" class="feedback-note">
+        GitHub issues are public and require a GitHub account. Review your
+        report and add screenshots on GitHub before posting. Please leave out
+        private text, account details and tokens.
+      </p>
+      <section class="feedback-email" aria-labelledby="email-heading">
+        <h2 id="email-heading">Prefer email?</h2>
+        <p>
+          No GitHub account needed.
+          <a id="email-feedback" href="mailto:grammai@zaapp.io"
+            >Email grammai@zaapp.io</a
+          >
+        </p>
+      </section>
+      <footer class="feedback-footer">
+        <a
+          href="https://github.com/zilvestro/grammai/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Browse existing issues</a
+        >
+        <span id="extension-version"></span>
+      </footer>
+    </main>
+    <script src="feedback.js" defer></script>
+  </body>
+</html>

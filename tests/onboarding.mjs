@@ -38,16 +38,12 @@ const pass = (name) => {
   checks++;
   console.log("PASS", name);
 };
-const verifyMail = async (link, version) => {
+const verifyFeedbackLink = async (link) => {
   const href = await link.getAttribute("href");
   const url = new URL(href);
-  assert.equal(url.protocol, "mailto:");
-  assert.equal(url.pathname, "grammai@zaapp.io");
-  assert.equal(url.searchParams.get("subject"), "grammai feedback");
-  assert.equal(
-    url.searchParams.get("body"),
-    `What could be better?\n\n\n---\ngrammai ${version}\n`,
-  );
+  assert.equal(url.protocol, "chrome-extension:");
+  assert.equal(url.pathname, "/feedback.html");
+  assert.equal(url.search, "");
   assert(!href.includes("DRAFT_SENTINEL"));
   assert(!href.includes("127.0.0.1"));
 };
@@ -86,25 +82,22 @@ try {
   await editor.fill("This is definately DRAFT_SENTINEL_987.");
   await expect(q.locator(".underline").first()).toBeVisible();
   await openAssistant(page, editor, q);
-  await verifyMail(
+  await verifyFeedbackLink(
     q.getByRole("link", { name: "Send feedback", exact: true }),
-    version,
   );
   await q.getByRole("tab", { name: "Rewrite", exact: true }).click();
-  await verifyMail(
+  await verifyFeedbackLink(
     q.getByRole("link", { name: "Send feedback", exact: true }),
-    version,
   );
   await expect(
     q.getByRole("link", { name: "AI settings", exact: true }),
   ).toHaveAttribute("href", `chrome-extension://${id}/help.html#ai`);
   await q.getByRole("tab", { name: "Translate", exact: true }).click();
-  await verifyMail(
+  await verifyFeedbackLink(
     q.getByRole("link", { name: "Send feedback", exact: true }),
-    version,
   );
   pass(
-    "the full widget exposes feedback in all three tabs, with only version metadata and no draft or website data",
+    "the full widget exposes feedback in all three tabs, through a private extension page without draft or website data",
   );
 
   // macOS can fall back to a user-wide host even for a fresh browser profile.
@@ -129,9 +122,8 @@ try {
     `--extension-id ${id}`,
   );
   await expect(help.locator("#helper-command")).not.toContainText(homedir());
-  await verifyMail(
+  await verifyFeedbackLink(
     help.getByRole("link", { name: "Send feedback", exact: true }),
-    version,
   );
   pass(
     "missing-helper errors lead to a bundled guide with the actual extension ID rather than developer-machine commands",
@@ -331,15 +323,13 @@ try {
   await expect(
     popup.getByRole("link", { name: "All settings", exact: true }),
   ).toHaveAttribute("href", "options.html");
-  await verifyMail(
+  await verifyFeedbackLink(
     options.getByRole("link", { name: "Send feedback", exact: true }),
-    version,
   );
   const side = await context.newPage();
   await side.goto(`chrome-extension://${id}/sidepanel.html`);
-  await verifyMail(
+  await verifyFeedbackLink(
     side.getByRole("link", { name: "Send feedback", exact: true }),
-    version,
   );
   pass(
     "setup and feedback remain discoverable in settings, the popup and the sidebar",

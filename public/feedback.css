@@ -1,0 +1,93 @@
+.feedback-header {
+  max-width: 960px;
+  margin: auto;
+  padding: 20px 28px;
+}
+.feedback-header > a:last-of-type {
+  margin-left: auto;
+  font-size: 12px;
+}
+.feedback-main {
+  max-width: 720px;
+  margin: auto;
+  padding: 64px 28px 40px;
+}
+.feedback-main h1 {
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 650;
+  letter-spacing: -1.1px;
+}
+.feedback-intro {
+  max-width: 480px;
+  margin-top: 16px;
+  color: var(--muted);
+}
+.feedback-actions {
+  margin-top: 36px;
+  border-top: 1px solid var(--line);
+}
+.feedback-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 8px;
+  border-bottom: 1px solid var(--line);
+  color: var(--fg);
+}
+.feedback-action:hover {
+  text-decoration: none;
+  background: var(--subtle);
+}
+.feedback-action strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.feedback-action strong + span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.feedback-destination {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+.feedback-note {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.feedback-email {
+  margin-top: 36px;
+}
+.feedback-email p {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.feedback-email a,
+.feedback-footer a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.feedback-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 48px;
+  color: var(--muted);
+  font-size: 11px;
+}
+@media (max-width: 480px) {
+  .feedback-main {
+    padding-top: 36px;
+  }
+  .feedback-action {
+    gap: 16px;
+    padding: 20px 0;
+  }
+}

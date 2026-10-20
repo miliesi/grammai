@@ -18,6 +18,6 @@ The extension does not copy provider passwords, API keys or login tokens. A dete
 
 ## Feedback
 
-The feedback link opens a draft in the user's mail application. It prefills the extension version and no draft text, page URL or diagnostic attachment. Only sending that email shares its content and sender address with grammai support.
+The feedback link opens a bundled page with separate GitHub bug-report and feature-idea links, plus an email fallback. Only the extension version is prefilled. Opening the page makes no external request and includes no editor text, page URL or diagnostics. Choosing GitHub opens a draft issue for the user to edit and submit; published issues and attachments are public and require a GitHub account. Choosing email opens a mail draft; only sending it shares its content and sender address with grammai support. Both paths work with unpacked GitHub builds and Store installations, without a GitHub token or additional extension permissions.
 
 See the full [privacy policy](../PRIVACY.md). Store publication also needs that policy at a public HTTPS URL; an extension-internal file alone does not supply the Dashboard's public policy URL.

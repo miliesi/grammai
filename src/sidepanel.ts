@@ -294,6 +294,4 @@ void load();
 
 void initializePageTheme({ toggle: false });
 
-document
-  .querySelector("#feedback-link")!
-  .append(feedbackLink(chrome.runtime.getManifest().version));
+document.querySelector("#feedback-link")!.append(feedbackLink());

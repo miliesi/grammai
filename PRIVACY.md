@@ -1,6 +1,6 @@
 # grammai privacy policy
 
-Last updated: 18 October 2026 · Extension version 0.6.6
+Last updated: 20 October 2026 · Extension version 0.6.6
 
 grammai is a writing assistant for spelling, grammar, rewrites and translation. Privacy questions and requests can be sent to [grammai@zaapp.io ](mailto:grammai@zaapp.io).
 
@@ -26,7 +26,11 @@ Active checks, suggestion fragments, requested AI previews and undo information 
 
 ## Feedback is sent only when you send it
 
-“Send feedback” opens your mail application with a draft addressed to grammai@zaapp.io. Only the extension version is prefilled; your writing, page URL and diagnostics are not attached automatically. If you send the email, grammai support receives your email address, message and anything you add. Support correspondence may be retained as needed to respond and follow up. Contact the same address to request deletion.
+“Send feedback” opens a bundled page where you can report a bug or suggest an idea on GitHub, or choose email. Only the extension version is prefilled; your writing, page URL and diagnostics are not attached automatically.
+
+Choosing GitHub opens a draft issue on github.com/zilvestro/grammai. GitHub issues are public and require a GitHub account. You review and submit the issue on GitHub; anything you add and publish, including screenshots, is public under GitHub's own privacy policy. Opening the feedback page alone makes no external request.
+
+Choosing email opens your mail application with a draft addressed to grammai@zaapp.io. If you send it, grammai support receives your email address, message and anything you add. Support correspondence may be retained as needed to respond and follow up. Contact the same address to request deletion.
 
 ## Sponsorship
 

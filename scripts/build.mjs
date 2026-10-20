@@ -17,6 +17,7 @@ await build({
     "src/options.ts",
     "src/sidepanel.ts",
     "src/help.ts",
+    "src/feedback.ts",
     "src/german-worker.ts",
     "src/grammar-offscreen.ts",
   ],

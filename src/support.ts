@@ -1,11 +1,15 @@
 import { el } from "./shared";
 
-export function feedbackLink(version: string, className = "feedback-link") {
+export function feedbackLink(className = "feedback-link") {
   const link = el("a", className, "Send feedback");
-  const subject = "grammai feedback";
-  const body = `What could be better?\n\n\n---\ngrammai ${version}\n`;
-  // Only the app version is included. Drafts, page URLs and diagnostics stay out.
-  link.href = `mailto:grammai@zaapp.io?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  link.href = chrome.runtime.getURL("feedback.html");
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  // Content scripts cannot navigate to private extension pages directly.
+  link.onclick = (event) => {
+    event.preventDefault();
+    void chrome.runtime.sendMessage({ type: "OPEN_FEEDBACK" }).catch(() => {});
+  };
   return link;
 }
 export function setupLink(topic: "ai" | "german" = "ai", label = "AI setup") {

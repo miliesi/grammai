@@ -32,7 +32,7 @@ A QUIETER WRITING TOOL
 The action pill appears only when you select text. Use light or dark mode, keyboard shortcuts and a compact assistant. Supported editors include ordinary text fields, contenteditable fields and tested Draft.js flows such as X-style social editors.
 
 PRIVATE BY DEFAULT
-Ordinary checks stay on your device. There are no analytics trackers or automatic text uploads. Only an AI action you request sends text through your chosen provider's CLI. Provider privacy terms and account settings apply. “Send feedback” opens an email draft for you to review and send.
+Ordinary checks stay on your device. There are no analytics trackers or automatic text uploads. Only an AI action you request sends text through your chosen provider's CLI. Provider privacy terms and account settings apply. “Send feedback” lets you open a public GitHub issue draft or an email draft for you to review and send. Only the extension version is prefilled.
 
 FREE, OPEN SOURCE, BUILT WITH THE COMMUNITY
 Source code: https://github.com/zilvestro/grammai

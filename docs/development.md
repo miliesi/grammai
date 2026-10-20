@@ -14,21 +14,21 @@ Load `dist` as an unpacked extension. `npm run demo` serves a writing room for t
 
 ## Layout
 
-| Path                       | Responsibility                                                            |
-| -------------------------- | ------------------------------------------------------------------------- |
-| `src/content.ts`           | Editor sessions, highlights, replacement, selection actions and inline UI |
-| `src/editor-text.ts`       | Editable text and DOM-range mapping                                       |
-| `src/background.ts`        | Message routing, English checking and optional native requests            |
-| `src/live-engine.ts`       | Local Harper checks and result adaptation                                 |
-| `src/lt-engine.ts`         | German and Romanian WASM loading and UTF-8 to UTF-16 adaptation           |
-| `src/lt-issues.ts`         | Shared adaptation of engine matches to editor issues                      |
-| `src/german.ts`, `src/romanian.ts` | Language-specific rules and wording on top of the engine          |
-| `src/grammar-offscreen.ts` | Dedicated worker lifecycle for German and Romanian                                         |
-| `src/rewrite-ui.ts`        | Shared rewrite and translation views                                      |
-| `native/`                  | Optional native helper and CLI requests                                   |
-| `public/`                  | Extension manifest, pages, icons and license notices                      |
-| `scripts/`                 | Build, installation and release tooling                                   |
-| `tests/`                   | Engine, transport, browser and editor regressions                         |
+| Path                               | Responsibility                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------- |
+| `src/content.ts`                   | Editor sessions, highlights, replacement, selection actions and inline UI |
+| `src/editor-text.ts`               | Editable text and DOM-range mapping                                       |
+| `src/background.ts`                | Message routing, English checking and optional native requests            |
+| `src/live-engine.ts`               | Local Harper checks and result adaptation                                 |
+| `src/lt-engine.ts`                 | German and Romanian WASM loading and UTF-8 to UTF-16 adaptation           |
+| `src/lt-issues.ts`                 | Shared adaptation of engine matches to editor issues                      |
+| `src/german.ts`, `src/romanian.ts` | Language-specific rules and wording on top of the engine                  |
+| `src/grammar-offscreen.ts`         | Dedicated worker lifecycle for German and Romanian                        |
+| `src/rewrite-ui.ts`                | Shared rewrite and translation views                                      |
+| `native/`                          | Optional native helper and CLI requests                                   |
+| `public/`                          | Extension manifest, pages, icons and license notices                      |
+| `scripts/`                         | Build, installation and release tooling                                   |
+| `tests/`                           | Engine, transport, browser and editor regressions                         |
 
 ## Local checking
 
@@ -59,6 +59,7 @@ Browser tests use temporary profiles. Set `QUILL_BROWSER=helium` to use an insta
 ```sh
 npm run test:e2e
 npm run test:editors
+npm run test:feedback
 QUILL_BROWSER=helium npm run test:experience
 QUILL_BROWSER=helium npm run test:draft
 QUILL_BROWSER=helium npm run test:ux
@@ -72,4 +73,7 @@ To test an extracted Store package instead of `dist`:
 
 ```sh
 GRAMMAI_EXTENSION_PATH=/absolute/path/to/extracted/package QUILL_BROWSER=helium npm run test:zero-install
+GRAMMAI_EXTENSION_PATH=/absolute/path/to/extracted/package npm run test:feedback
 ```
+
+`test:feedback` checks the real extension's entry points, GitHub draft URLs, email fallback and appearance. GitHub navigation is intercepted inside the test; it never submits a public issue or sends an email. Run it against both `dist` and the extracted Store ZIP to verify that links use each installation's actual extension ID.
