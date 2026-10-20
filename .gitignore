@@ -15,3 +15,6 @@ research/
 
 .claude/
 awake/
+.wrangler/
+.dev.vars
+.dev.vars.*

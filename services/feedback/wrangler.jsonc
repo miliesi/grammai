@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "grammai-feedback",
+  "main": "worker.ts",
+  "compatibility_date": "2026-10-20",
+  "workers_dev": true,
+  "observability": { "enabled": false },
+  "vars": { "GITHUB_REPOSITORY": "zilvestro/grammai" },
+  "ratelimits": [
+    {
+      "name": "FEEDBACK_LIMIT",
+      "namespace_id": "184720261",
+      "simple": { "limit": 3, "period": 60 },
+    },
+    {
+      "name": "GLOBAL_LIMIT",
+      "namespace_id": "184720262",
+      "simple": { "limit": 30, "period": 60 },
+    },
+  ],
+}

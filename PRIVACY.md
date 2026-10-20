@@ -26,11 +26,13 @@ Active checks, suggestion fragments, requested AI previews and undo information 
 
 ## Feedback is sent only when you send it
 
-“Send feedback” opens a bundled page where you can report a bug or suggest an idea on GitHub, or choose email. Only the extension version is prefilled; your writing, page URL and diagnostics are not attached automatically.
+“Send feedback” opens a bundled form for bugs and ideas. Opening the form makes no external request. When you press **Send feedback**, the title, description and report type you enter, plus the extension version, are sent to grammai's feedback endpoint hosted by Cloudflare. Your editor text, page URL, browsing history and diagnostics are not collected or attached automatically.
 
-Choosing GitHub opens a draft issue on github.com/zilvestro/grammai. GitHub issues are public and require a GitHub account. You review and submit the issue on GitHub; anything you add and publish, including screenshots, is public under GitHub's own privacy policy. Opening the feedback page alone makes no external request.
+The endpoint creates a **public GitHub issue** in github.com/zilvestro/grammai using a server-side credential. You do not need a GitHub account and are not redirected to GitHub to submit. Published reports are public under GitHub's own privacy policy. Do not include private text, account details or tokens in the form.
 
-Choosing email opens your mail application with a draft addressed to grammai@zaapp.io. If you send it, grammai support receives your email address, message and anything you add. Support correspondence may be retained as needed to respond and follow up. Contact the same address to request deletion.
+Cloudflare processes the request and its network metadata. The endpoint uses the connecting IP for short-lived rate limiting; it does not put IP addresses in GitHub issues or deliberately log report bodies, IPs or credentials. Cloudflare's own data handling also applies.
+
+Choosing email opens your mail application with a draft addressed to grammai@zaapp.io. If you send it, grammai support receives your email address, message and anything you add. Support correspondence may be retained as needed to respond and follow up. Contact the same address about your report or to request deletion.
 
 ## Sponsorship
 

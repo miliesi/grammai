@@ -76,4 +76,11 @@ GRAMMAI_EXTENSION_PATH=/absolute/path/to/extracted/package QUILL_BROWSER=helium 
 GRAMMAI_EXTENSION_PATH=/absolute/path/to/extracted/package npm run test:feedback
 ```
 
-`test:feedback` checks the real extension's entry points, GitHub draft URLs, email fallback and appearance. GitHub navigation is intercepted inside the test; it never submits a public issue or sends an email. Run it against both `dist` and the extracted Store ZIP to verify that links use each installation's actual extension ID.
+`test:feedback` checks the real extension's entry points, in-place submission, success and error states, email fallback and appearance. The endpoint is intercepted inside the test; it never submits a public issue or sends an email. With no endpoint configured it checks the disabled-send fallback instead. To exercise submission, build with a mock HTTPS endpoint first:
+
+```sh
+GRAMMAI_FEEDBACK_ENDPOINT=https://feedback.grammai.test/v1/feedback npm run build
+npm run test:feedback
+```
+
+Run against both that `dist` build and its extracted Store ZIP to verify different installation IDs. Never publish a package built with the test endpoint. Worker unit tests run with `npm test`. See [feedback deployment](feedback.md) for the production setup.

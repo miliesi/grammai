@@ -24,52 +24,71 @@
     <main class="feedback-main">
       <h1>Help improve grammai.</h1>
       <p class="feedback-intro">
-        Found something that doesn't work? Have an idea for better writing? We'd
-        like to hear it.
+        Found a bug or have an idea? Send it straight to the people building
+        grammai.
       </p>
-      <nav class="feedback-actions" aria-label="Share feedback on GitHub">
-        <a
-          id="report-bug"
-          class="feedback-action"
-          href="https://github.com/zilvestro/grammai/issues/new?template=bug_report.md"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-labelledby="bug-title"
-          aria-describedby="github-note"
+      <form id="feedback-form" aria-label="Send feedback">
+        <fieldset id="feedback-fields">
+          <legend class="visually-hidden">Your feedback</legend>
+          <label for="feedback-kind">What would you like to share?</label>
+          <select id="feedback-kind" name="kind">
+            <option value="bug">Report a bug</option>
+            <option value="idea">Suggest an idea</option>
+          </select>
+          <label for="feedback-title">Title</label>
+          <input
+            id="feedback-title"
+            name="title"
+            type="text"
+            required
+            minlength="3"
+            maxlength="120"
+            placeholder="A short summary"
+            autocomplete="off"
+          />
+          <label for="feedback-description">Description</label>
+          <textarea
+            id="feedback-description"
+            name="description"
+            required
+            minlength="10"
+            maxlength="6000"
+            rows="7"
+            placeholder="What happened, and what did you expect? A small example or steps to reproduce will help."
+            aria-describedby="github-note"
+          ></textarea>
+          <p id="github-note" class="feedback-note">
+            Your feedback will be posted publicly in our GitHub issue tracker.
+            No GitHub account needed. Please leave out private text, account
+            details and tokens. Only your message and the grammai version are
+            sent.
+          </p>
+          <button id="send-feedback" class="button" type="submit">
+            Send feedback
+          </button>
+        </fieldset>
+      </form>
+      <p
+        id="feedback-status"
+        class="feedback-note"
+        role="status"
+        aria-live="polite"
+        tabindex="-1"
+      ></p>
+      <section id="feedback-success" hidden aria-labelledby="success-heading">
+        <h2 id="success-heading">Thanks for your feedback.</h2>
+        <p>Your report has been saved. You can stay here and keep writing.</p>
+        <a id="view-issue" target="_blank" rel="noopener noreferrer" hidden
+          >View your report</a
         >
-          <span
-            ><strong id="bug-title">Report a bug</strong
-            ><span>Tell us what happened and what you expected.</span></span
-          >
-          <span class="feedback-destination" aria-hidden="true">GitHub ↗</span>
-        </a>
-        <a
-          id="suggest-idea"
-          class="feedback-action"
-          href="https://github.com/zilvestro/grammai/issues/new?template=feature_request.md"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-labelledby="idea-title"
-          aria-describedby="github-note"
-        >
-          <span
-            ><strong id="idea-title">Suggest an idea</strong
-            ><span
-              >Share a feature or a small change that would help.</span
-            ></span
-          >
-          <span class="feedback-destination" aria-hidden="true">GitHub ↗</span>
-        </a>
-      </nav>
-      <p id="github-note" class="feedback-note">
-        GitHub issues are public and require a GitHub account. Review your
-        report and add screenshots on GitHub before posting. Please leave out
-        private text, account details and tokens.
-      </p>
+        <button id="send-another" class="button" type="button">
+          Send another report
+        </button>
+      </section>
       <section class="feedback-email" aria-labelledby="email-heading">
         <h2 id="email-heading">Prefer email?</h2>
         <p>
-          No GitHub account needed.
+          Or send us an email.
           <a id="email-feedback" href="mailto:grammai@zaapp.io"
             >Email grammai@zaapp.io</a
           >

@@ -27,13 +27,34 @@ context.on("request", (request) => {
   if (/^https?:/.test(request.url()) && !request.url().includes("127.0.0.1"))
     requests.push(request.url());
 });
-// Verify navigation and the exact draft without creating a public test issue.
-await context.route("https://github.com/**", (route) =>
-  route.fulfill({
-    contentType: "text/html",
-    body: "<title>GitHub issue draft</title><p>Review your report on GitHub</p>",
-  }),
+const buildManifest = JSON.parse(
+  await readFile(path.join(extension, "manifest.json"), "utf8"),
 );
+const endpoint =
+  buildManifest.host_permissions?.[0]?.replace(/\/\*$/, "/v1/feedback") ||
+  "https://feedback.grammai.test/v1/feedback";
+const reports = [];
+const requestOrigins = [];
+let failNext = false;
+// Intercept HTTPS even for production-configured packages: tests must never
+// post a synthetic report to the live service or create a public issue.
+await context.route("https://**/*", async (route) => {
+  if (route.request().url() !== endpoint) return route.abort();
+  reports.push(route.request().postDataJSON());
+  requestOrigins.push(route.request().headers().origin);
+  const fail = failNext;
+  failNext = false;
+  await route.fulfill({
+    status: fail ? 503 : 201,
+    contentType: "application/json",
+    headers: { "Access-Control-Allow-Origin": "*" },
+    body: JSON.stringify(
+      fail
+        ? { error: "Feedback is temporarily unavailable. Please use email." }
+        : { number: 42, url: "https://github.com/zilvestro/grammai/issues/42" },
+    ),
+  });
+});
 try {
   const worker =
     context.serviceWorkers()[0] ||
@@ -95,32 +116,92 @@ try {
     "PASS feedback opens from the popup, settings, help and sidebar using the current installation ID",
   );
 
-  for (const [label, template] of [
-    ["Report a bug", "bug_report.md"],
-    ["Suggest an idea", "feature_request.md"],
-  ]) {
-    const [draft] = await Promise.all([
-      context.waitForEvent("page"),
-      feedback.getByRole("link", { name: label, exact: true }).click(),
-    ]);
-    await draft.waitForLoadState("domcontentloaded");
-    const url = new URL(draft.url());
-    assert.equal(url.origin, "https://github.com");
-    assert.equal(url.pathname, "/zilvestro/grammai/issues/new");
-    assert.equal(url.searchParams.get("template"), template);
-    assert(
-      url.searchParams.get("body").includes(`- grammai version: ${version}\n`),
+  const send = feedback.getByRole("button", {
+    name: "Send feedback",
+    exact: true,
+  });
+  const title = feedback.getByRole("textbox", { name: "Title", exact: true });
+  const description = feedback.getByRole("textbox", {
+    name: "Description",
+    exact: true,
+  });
+  const configured = await send.isEnabled();
+  if (configured) {
+    const pageCount = context.pages().length;
+    for (const kind of ["bug", "idea"]) {
+      await feedback.locator("#feedback-kind").selectOption(kind);
+      await title.fill(
+        kind === "bug" ? "The underline is offset" : "Add a writing shortcut",
+      );
+      await description.fill(
+        "A synthetic example supplied explicitly in the feedback form.",
+      );
+      await send.click();
+      await expect(feedback.locator("#feedback-success")).toBeVisible();
+      assert.equal(
+        context.pages().length,
+        pageCount,
+        "sending must not open GitHub",
+      );
+      await expect(feedback).toHaveURL(
+        `chrome-extension://${id}/feedback.html`,
+      );
+      await expect(
+        feedback.getByRole("link", { name: "View your report" }),
+      ).toHaveAttribute(
+        "href",
+        "https://github.com/zilvestro/grammai/issues/42",
+      );
+      const report = reports.at(-1);
+      assert.deepEqual(Object.keys(report).sort(), [
+        "description",
+        "kind",
+        "title",
+        "version",
+      ]);
+      assert.equal(report.kind, kind);
+      assert.equal(report.version, version);
+      assert(!JSON.stringify(report).includes("PRIVATE_DRAFT_SENTINEL"));
+      assert(!JSON.stringify(report).includes(id));
+      await feedback
+        .getByRole("button", { name: "Send another report" })
+        .click();
+    }
+    assert.equal(reports.length, 2);
+    await title.fill("Keep my report on failure");
+    await description.fill(
+      "This report must still be editable when the server cannot save it.",
     );
-    assert(!url.href.includes("PRIVATE_DRAFT_SENTINEL"));
-    assert(!url.href.includes("127.0.0.1"));
-    assert(!url.href.includes(id));
-    assert.deepEqual([...url.searchParams.keys()], ["template", "body"]);
-    await draft.close();
+    failNext = true;
+    await send.click();
+    await expect(feedback.getByRole("status")).toContainText(
+      "temporarily unavailable",
+    );
+    await expect(title).toHaveValue("Keep my report on failure");
+    await expect(description).toHaveValue(
+      "This report must still be editable when the server cannot save it.",
+    );
+    await expect(send).toBeEnabled();
+    await send.click();
+    await expect(feedback.locator("#feedback-success")).toBeVisible();
+    await feedback.getByRole("button", { name: "Send another report" }).click();
+    assert.equal(reports.length, 4);
+    assert(
+      requestOrigins.every((origin) => origin === `chrome-extension://${id}`),
+    );
+    assert(requests.every((url) => url === endpoint));
+    console.log(
+      "PASS bugs and ideas submit in place with only explicitly supplied fields; failures keep the draft and allow retry",
+    );
+  } else {
+    await expect(feedback.getByRole("status")).toContainText(
+      "isn't available in this build",
+    );
+    assert.deepEqual(requests, []);
+    console.log(
+      "PASS unconfigured builds explain email fallback without attempting a request",
+    );
   }
-  assert.equal(requests.length, 2);
-  console.log(
-    "PASS bug and idea actions open separate GitHub drafts with only version metadata",
-  );
 
   const mail = new URL(
     await feedback
@@ -135,11 +216,9 @@ try {
   );
   await expect(feedback.locator("#github-note")).toContainText("public");
   await expect(feedback.locator("#github-note")).toContainText(
-    "GitHub account",
+    "No GitHub account needed",
   );
-  console.log(
-    "PASS public GitHub reporting is explained and email remains available without a GitHub account",
-  );
+  console.log("PASS public posting is explained and email remains available");
 
   await mkdir("artifacts", { recursive: true });
   await feedback.screenshot({
