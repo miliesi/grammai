@@ -26,7 +26,7 @@ Active checks, suggestion fragments, requested AI previews and undo information 
 
 ## Feedback is sent only when you send it
 
-“Send feedback” opens a bundled form for bugs and ideas. Opening the form makes no external request. When you press **Send feedback**, the title, description and report type you enter, plus the extension version, are sent to grammai's feedback endpoint hosted by Cloudflare. Your editor text, page URL, browsing history and diagnostics are not collected or attached automatically.
+“Send feedback” opens a bundled form for bugs and ideas. Opening the form makes no external request. When you press **Send feedback**, the title, description and report type you enter, plus the extension version and any screenshots you choose to attach, are sent to grammai's feedback endpoint hosted by Cloudflare. Your editor text, page URL, browsing history and diagnostics are not collected or attached automatically.
 
 The endpoint creates a **public GitHub issue** in github.com/zilvestro/grammai using a server-side credential. You do not need a GitHub account and are not redirected to GitHub to submit. Published reports are public under GitHub's own privacy policy. Do not include private text, account details or tokens in the form.
 
@@ -49,3 +49,5 @@ You can disable checking globally or per website, change language preferences, a
 ## Changes
 
 This policy describes the current extension. If data handling changes, the policy and relevant in-product disclosures will be updated before the changed handling is introduced.
+
+Optional screenshots are redrawn on your device as PNG files before submission to remove original filenames and embedded image metadata. Opening the screenshot section checks upload availability with Cloudflare; choosing or previewing an image does not upload it. Attached images are stored in Cloudflare R2 and made publicly readable so GitHub can display them in the issue. Images remain stored until removed by a maintainer; deleting an issue does not automatically delete its images. To request removal, email grammai@zaapp.io with the issue link. Do not attach private or sensitive content.

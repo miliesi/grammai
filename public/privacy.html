@@ -107,9 +107,10 @@
       “Send feedback” opens a bundled form for bugs and ideas. Opening the form
       makes no external request. When you press <strong>Send feedback</strong>,
       the title, description and report type you enter, plus the extension
-      version, are sent to grammai's feedback endpoint hosted by Cloudflare.
-      Your editor text, page URL, browsing history and diagnostics are not
-      collected or attached automatically.
+      version and any screenshots you choose to attach, are sent to grammai's
+      feedback endpoint hosted by Cloudflare. Your editor text, page URL,
+      browsing history and diagnostics are not collected or attached
+      automatically.
     </p>
     <p>
       The endpoint creates a <strong>public GitHub issue</strong> in
@@ -132,6 +133,15 @@
       about your report or to request deletion.
     </p>
 
+    <p>
+      Optional screenshots are redrawn locally as PNG files to remove original
+      filenames and embedded metadata. Opening the screenshot section checks
+      upload availability; selecting an image does not upload it. Submitted
+      images are stored in Cloudflare R2 and publicly readable for display in
+      GitHub. They remain until a maintainer removes them; deleting an issue
+      does not automatically delete its images. Request removal by emailing
+      grammai@zaapp.io with the issue link. Do not attach private content.
+    </p>
     <h2>Sponsorship</h2>
     <p>
       grammai displays a static sponsor link to Affonso. The logo is bundled

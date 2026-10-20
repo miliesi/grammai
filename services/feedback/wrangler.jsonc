@@ -6,6 +6,8 @@
   "workers_dev": true,
   "observability": { "enabled": false },
   "vars": { "GITHUB_REPOSITORY": "zilvestro/grammai" },
+  // After activating R2 and creating the private bucket, enable this binding:
+  // "r2_buckets": [{ "binding": "FEEDBACK_IMAGES", "bucket_name": "grammai-feedback-images" }],
   "ratelimits": [
     {
       "name": "FEEDBACK_LIMIT",

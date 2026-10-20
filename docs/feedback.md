@@ -38,6 +38,25 @@ The committed endpoint is `https://grammai-feedback.grammai.workers.dev/v1/feedb
 
 The build adds only the chosen HTTPS origin to host permissions and the extension's `connect-src` policy. Do not add tokens to `feedback.config.json`, build variables or the extension. `.dev.vars` files and Wrangler's local state are ignored by Git.
 
+## Optional screenshots
+
+Screenshots are implemented but remain unavailable on the live service until R2 is activated and bound. Text reports work without R2. To enable uploads:
+
+1. Activate R2 in the owning Cloudflare account if necessary. Cloudflare requires its R2 checkout flow; included free usage and usage-based billing apply. See [R2 setup](https://developers.cloudflare.com/r2/get-started/).
+2. Create the private bucket (do not enable public bucket access):
+
+   ```sh
+   npx wrangler@4.151.3 r2 bucket create grammai-feedback-images
+   ```
+
+3. Uncomment `r2_buckets` in `services/feedback/wrangler.jsonc` and deploy using the same command above. The existing GitHub token needs no additional permissions. No extension rebuild is needed to enable uploads.
+
+Opening **Add screenshots** checks `GET /v1/feedback`, which returns `{ "images": true }` only when the bucket binding exists. The form accepts up to two PNG, JPEG or WebP files of 2 MiB each. It redraws each selected image locally as PNG, strips original filenames and embedded metadata, rejects images above 16 million pixels or normalized images above 2 MiB, and offers previews and removal. Selection sends no images. Pressing Send submits the explicit report fields and normalized images together as multipart form data. Text-only reports continue to use JSON.
+
+The Worker checks count, size and PNG headers before storing under random UUID filenames, and embeds image URLs in the issue. `GET`/`HEAD /images/<uuid>.png` serve only these PNG objects with a fixed image type and `nosniff`, so GitHub's image proxy can display them. No public bucket listing or standalone upload endpoint is exposed. Storage calls use the Worker binding, with no extra client secret.
+
+Images stay in R2 until a maintainer removes them. Deleting an issue does not automatically delete its objects. For a removal request, identify the UUID from the issue's Markdown and run `npx wrangler@4.151.3 r2 object delete grammai-feedback-images/<uuid>.png --remote`. Remove the issue image link as well; GitHub may retain its own proxy cache. Uploads are cleaned up after a failed storage write or a definitive GitHub 4xx rejection. After an ambiguous timeout or 5xx, they are retained because an issue might already reference them; maintainers should reconcile these occasional orphans. Rate limits bound submissions per Cloudflare location, not total account storage or billing. Monitor R2 usage and moderate public reports.
+
 ## Behavior
 
 `POST /v1/feedback` accepts JSON with `kind` (`bug` or `idea`), `title` (3–120 characters), `description` (10–6,000 characters) and a dotted numeric extension `version`. It creates a labeled issue and returns HTTP 201 with `{ "number": 42, "url": "https://github.com/zilvestro/grammai/issues/42" }` only after GitHub confirms creation. It cannot select arbitrary repositories or attach editor data, URLs, tokens or network metadata to issues.

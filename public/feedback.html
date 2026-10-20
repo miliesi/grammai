@@ -57,11 +57,41 @@
             placeholder="What happened, and what did you expect? A small example or steps to reproduce will help."
             aria-describedby="github-note"
           ></textarea>
+          <details id="feedback-images">
+            <summary>Add screenshots <span>(optional)</span></summary>
+            <p id="image-help" class="feedback-note">
+              Up to 2 images, 2 MB each. PNG, JPEG or WebP. Selected images will
+              be public. Crop out anything private before adding them.
+            </p>
+            <label for="feedback-files" class="visually-hidden"
+              >Screenshots</label
+            >
+            <input
+              id="feedback-files"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              multiple
+              disabled
+              aria-describedby="image-help image-status"
+            />
+            <p
+              id="image-status"
+              class="feedback-note"
+              role="status"
+              aria-live="polite"
+            ></p>
+            <ul id="image-previews" aria-label="Attached screenshots"></ul>
+          </details>
           <p id="github-note" class="feedback-note">
-            Your feedback will be posted publicly in our GitHub issue tracker.
-            No GitHub account needed. Please leave out private text, account
-            details and tokens. Only your message and the grammai version are
-            sent.
+            Your feedback will be posted publicly in
+            <a
+              href="https://github.com/zilvestro/grammai/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              >our GitHub issue tracker</a
+            >. No GitHub account needed. Please leave out private text, account
+            details and tokens. Only your message, any images you attach and the
+            grammai version are sent.
           </p>
           <button id="send-feedback" class="button" type="submit">
             Send feedback

@@ -36,11 +36,37 @@ const endpoint =
 const reports = [];
 const requestOrigins = [];
 let failNext = false;
+let imagesAvailable = true;
+const uploads = [];
 // Intercept HTTPS even for production-configured packages: tests must never
 // post a synthetic report to the live service or create a public issue.
 await context.route("https://**/*", async (route) => {
   if (route.request().url() !== endpoint) return route.abort();
-  reports.push(route.request().postDataJSON());
+  if (route.request().method() === "GET") {
+    // Like the Worker, accept host-permitted GETs without an Origin header.
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ images: imagesAvailable }),
+    });
+  }
+  if (
+    route.request().headers()["content-type"]?.startsWith("multipart/form-data")
+  ) {
+    const raw = route.request().postDataBuffer();
+    const form = await new Response(raw, {
+      headers: { "Content-Type": route.request().headers()["content-type"] },
+    }).formData();
+    uploads.push({ form, raw });
+    reports.push(
+      Object.fromEntries(
+        ["kind", "title", "description", "version"].map((key) => [
+          key,
+          form.get(key),
+        ]),
+      ),
+    );
+  } else reports.push(route.request().postDataJSON());
   requestOrigins.push(route.request().headers().origin);
   const fail = failNext;
   failNext = false;
@@ -174,7 +200,7 @@ try {
     );
     failNext = true;
     await send.click();
-    await expect(feedback.getByRole("status")).toContainText(
+    await expect(feedback.locator("#feedback-status")).toContainText(
       "temporarily unavailable",
     );
     await expect(title).toHaveValue("Keep my report on failure");
@@ -193,8 +219,80 @@ try {
     console.log(
       "PASS bugs and ideas submit in place with only explicitly supplied fields; failures keep the draft and allow retry",
     );
+    await feedback.locator("#feedback-images summary").click();
+    const files = feedback.locator("#feedback-files");
+    await expect(files).toBeEnabled();
+    const png = Buffer.from(
+      await feedback.evaluate(() => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 8;
+        canvas.height = 8;
+        canvas.getContext("2d").fillRect(0, 0, 8, 8);
+        return canvas.toDataURL().split(",")[1];
+      }),
+      "base64",
+    );
+    const fixture = {
+      name: "PRIVATE_ORIGINAL_FILENAME.png",
+      mimeType: "image/png",
+      buffer: png,
+    };
+    await files.setInputFiles([fixture, fixture]);
+    await expect(feedback.locator("#image-previews img")).toHaveCount(2);
+    await files.setInputFiles(fixture);
+    await expect(feedback.locator("#image-status")).toContainText("up to 2");
+    await feedback.getByRole("button", { name: "Remove screenshot 1" }).click();
+    await expect(feedback.locator("#image-previews img")).toHaveCount(1);
+    await title.fill("Screenshot attached explicitly");
+    await description.fill(
+      "This example includes one image selected by the user.",
+    );
+    failNext = true;
+    await send.click();
+    await expect(feedback.locator("#feedback-status")).toContainText(
+      "temporarily unavailable",
+    );
+    await expect(feedback.locator("#image-previews img")).toHaveCount(1);
+    await send.click();
+    await expect(feedback.locator("#feedback-success")).toBeVisible();
+    assert.equal(uploads.length, 2);
+    const attached = uploads.at(-1).form.getAll("images");
+    assert.equal(attached.length, 1);
+    assert.equal(attached[0].type, "image/png");
+    assert.equal(attached[0].name, "screenshot-1.png");
+    assert(
+      !uploads.at(-1).raw.includes(Buffer.from("PRIVATE_ORIGINAL_FILENAME")),
+    );
+    await feedback.getByRole("button", { name: "Send another report" }).click();
+    await expect(feedback.locator("#image-previews img")).toHaveCount(0);
+    await files.setInputFiles({
+      name: "fake.png",
+      mimeType: "image/png",
+      buffer: Buffer.from("not an image"),
+    });
+    await expect(feedback.locator("#image-status")).not.toHaveText(
+      "Preparing images…",
+    );
+    await expect(feedback.locator("#image-previews img")).toHaveCount(0);
+    await expect(send).toBeEnabled();
+    imagesAvailable = false;
+    const unavailable = await context.newPage();
+    await unavailable.goto(`chrome-extension://${id}/feedback.html`);
+    await unavailable.locator("#feedback-images summary").click();
+    await expect(unavailable.locator("#image-status")).toContainText(
+      "aren't available",
+    );
+    await expect(unavailable.locator("#feedback-files")).toBeDisabled();
+    await expect(unavailable.locator("#send-feedback")).toBeEnabled();
+    await unavailable.close();
+    imagesAvailable = true;
+    await files.setInputFiles(fixture);
+    await expect(feedback.locator("#image-previews img")).toHaveCount(1);
+    console.log(
+      "PASS screenshots preview, remove, submit without original filenames, survive failure and reset; unavailable storage keeps text feedback working",
+    );
   } else {
-    await expect(feedback.getByRole("status")).toContainText(
+    await expect(feedback.locator("#feedback-status")).toContainText(
       "isn't available in this build",
     );
     assert.deepEqual(requests, []);
@@ -218,6 +316,11 @@ try {
   await expect(feedback.locator("#github-note")).toContainText(
     "No GitHub account needed",
   );
+  await expect(
+    feedback
+      .locator("#github-note")
+      .getByRole("link", { name: "our GitHub issue tracker" }),
+  ).toHaveAttribute("href", "https://github.com/zilvestro/grammai/issues");
   console.log("PASS public posting is explained and email remains available");
 
   await mkdir("artifacts", { recursive: true });
@@ -245,6 +348,19 @@ try {
   await feedback.setViewportSize({ width: 1280, height: 900 });
 
   let html = await feedback.content();
+  // Blob URLs belong to the test browser. Embed previews for the shared page.
+  for (const preview of await feedback.locator("#image-previews img").all()) {
+    const source = await preview.getAttribute("src");
+    const dataUrl = await preview.evaluate(async (img) => {
+      const blob = await (await fetch(img.src)).blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    });
+    html = html.replace(`src="${source}"`, `src="${dataUrl}"`);
+  }
   for (const name of ["ui.css", "feedback.css"])
     html = html.replace(
       new RegExp(`<link[^>]+href="${name}"[^>]*>`),

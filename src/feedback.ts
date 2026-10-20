@@ -1,5 +1,6 @@
 import { feedbackEmailUrl } from "./feedback-links";
 import { initializePageTheme } from "./theme";
+import { prepareScreenshot } from "./feedback-images";
 
 declare const __FEEDBACK_ENDPOINT__: string;
 const version = chrome.runtime.getManifest().version;
@@ -15,7 +16,93 @@ const status = document.querySelector<HTMLElement>("#feedback-status")!;
 const success = document.querySelector<HTMLElement>("#feedback-success")!;
 const viewIssue = document.querySelector<HTMLAnchorElement>("#view-issue")!;
 let sending = false;
+let preparingImages = false;
+let imageCheck: Promise<void> | undefined;
+const imageDetails =
+  document.querySelector<HTMLDetailsElement>("#feedback-images")!;
+const imageInput = document.querySelector<HTMLInputElement>("#feedback-files")!;
+const imageStatus = document.querySelector<HTMLElement>("#image-status")!;
+const previews = document.querySelector<HTMLUListElement>("#image-previews")!;
+const images: Array<{ blob: Blob; url: string }> = [];
 class FeedbackError extends Error {}
+
+function renderImages() {
+  previews.replaceChildren();
+  images.forEach((image, index) => {
+    const item = document.createElement("li");
+    const preview = document.createElement("img");
+    preview.src = image.url;
+    preview.alt = `Screenshot ${index + 1}`;
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = `Remove screenshot ${index + 1}`;
+    remove.addEventListener("click", () => {
+      URL.revokeObjectURL(image.url);
+      images.splice(index, 1);
+      imageStatus.textContent = "";
+      renderImages();
+    });
+    item.append(preview, remove);
+    previews.append(item);
+  });
+}
+
+imageDetails.addEventListener("toggle", () => {
+  if (!imageDetails.open || imageCheck || !__FEEDBACK_ENDPOINT__) return;
+  // Check storage availability only when the user opens the optional section.
+  imageCheck = (async () => {
+    imageStatus.textContent = "Checking screenshot uploads…";
+    try {
+      const response = await fetch(__FEEDBACK_ENDPOINT__, {
+        credentials: "omit",
+        referrerPolicy: "no-referrer",
+        signal: AbortSignal.timeout(10000),
+      });
+      const capabilities = await response.json();
+      if (!response.ok || capabilities.images !== true)
+        throw new Error("Unavailable");
+      imageInput.disabled = false;
+      imageStatus.textContent = "";
+    } catch {
+      imageStatus.textContent =
+        "Screenshot uploads aren't available right now. You can send images by email below.";
+      imageCheck = undefined;
+    }
+  })();
+});
+
+imageInput.addEventListener("change", async () => {
+  const selected = Array.from(imageInput.files || []);
+  imageInput.value = "";
+  if (sending || preparingImages || !selected.length) return;
+  if (images.length + selected.length > 2) {
+    imageStatus.textContent =
+      "You can attach up to 2 screenshots. Remove one before adding another.";
+    return;
+  }
+  preparingImages = true;
+  imageInput.disabled = true;
+  send.disabled = true;
+  imageStatus.textContent = "Preparing images…";
+  const prepared: Blob[] = [];
+  try {
+    for (const file of selected) prepared.push(await prepareScreenshot(file));
+    images.push(
+      ...prepared.map((blob) => ({ blob, url: URL.createObjectURL(blob) })),
+    );
+    renderImages();
+    imageStatus.textContent = "";
+  } catch (error) {
+    imageStatus.textContent =
+      error instanceof Error
+        ? error.message
+        : "This image could not be opened.";
+  } finally {
+    preparingImages = false;
+    imageInput.disabled = false;
+    send.disabled = !__FEEDBACK_ENDPOINT__;
+  }
+});
 
 document.querySelector<HTMLAnchorElement>("#email-feedback")!.href =
   feedbackEmailUrl(version);
@@ -31,6 +118,7 @@ kind.addEventListener("change", () => {
 });
 
 if (!__FEEDBACK_ENDPOINT__) {
+  imageDetails.hidden = true;
   send.disabled = true;
   status.textContent =
     "Direct sending isn't available in this build. You can use email below.";
@@ -38,7 +126,13 @@ if (!__FEEDBACK_ENDPOINT__) {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  if (sending || !__FEEDBACK_ENDPOINT__ || !form.reportValidity()) return;
+  if (
+    sending ||
+    preparingImages ||
+    !__FEEDBACK_ENDPOINT__ ||
+    !form.reportValidity()
+  )
+    return;
   const report = {
     kind: kind.value,
     title: title.value.trim(),
@@ -56,13 +150,25 @@ form.addEventListener("submit", async (event) => {
   send.textContent = "Sending…";
   status.textContent = "";
   try {
+    let body: string | FormData = JSON.stringify(report);
+    if (images.length) {
+      const multipart = new FormData();
+      for (const [key, value] of Object.entries(report))
+        multipart.set(key, value);
+      images.forEach((image, index) =>
+        multipart.append("images", image.blob, `screenshot-${index + 1}.png`),
+      );
+      body = multipart;
+    }
     const response = await fetch(__FEEDBACK_ENDPOINT__, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: images.length
+        ? undefined
+        : { "Content-Type": "application/json" },
       credentials: "omit",
       referrerPolicy: "no-referrer",
-      body: JSON.stringify(report),
-      signal: AbortSignal.timeout(20000),
+      body,
+      signal: AbortSignal.timeout(30000),
     });
     const result = await response.json();
     if (!response.ok)
@@ -103,6 +209,10 @@ document
   .querySelector<HTMLButtonElement>("#send-another")!
   .addEventListener("click", () => {
     form.reset();
+    images.forEach((image) => URL.revokeObjectURL(image.url));
+    images.length = 0;
+    renderImages();
+    imageStatus.textContent = "";
     kind.dispatchEvent(new Event("change"));
     form.hidden = false;
     success.hidden = true;
