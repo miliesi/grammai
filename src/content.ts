@@ -1147,7 +1147,6 @@ function position() {
       "textIndent",
       "textTransform",
       "tabSize",
-      "boxSizing",
       "paddingTop",
       "paddingRight",
       "paddingBottom",
@@ -1160,6 +1159,7 @@ function position() {
     ] as const)
       mirror.style[k] = cs[k];
     Object.assign(mirror.style, {
+      boxSizing: "border-box",
       left: rect.left + "px",
       top: rect.top + "px",
       width: rect.width + "px",
@@ -1169,6 +1169,17 @@ function position() {
         editor instanceof HTMLInputElement ? "normal" : "break-word",
       borderColor: "transparent",
     });
+    if (editor instanceof HTMLInputElement) {
+      // Native single-line inputs center their text inside the content box,
+      // regardless of line-height. A div otherwise starts at the top padding.
+      const contentHeight =
+        rect.height -
+        parseFloat(cs.borderTopWidth) -
+        parseFloat(cs.borderBottomWidth) -
+        parseFloat(cs.paddingTop) -
+        parseFloat(cs.paddingBottom);
+      mirror.style.lineHeight = `${Math.max(0, contentHeight)}px`;
+    }
     mirror.textContent = session.text.slice(0, 20000);
     mirror.scrollTop = editor.scrollTop;
     mirror.scrollLeft = editor.scrollLeft;

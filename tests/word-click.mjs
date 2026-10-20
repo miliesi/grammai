@@ -257,6 +257,88 @@ try {
     .click();
   await expect(q.locator(".panel")).toHaveCount(0);
   pass("clicking another iframe also dismisses the open widget");
+  for (const [tag, css, text] of [
+    ["input", "height:88px;padding:0 28px;line-height:normal", "neseccary"],
+    ["input", "height:72px;padding:8px 28px;line-height:120px", "neseccary"],
+    [
+      "input",
+      "box-sizing:content-box;height:64px;padding:7px 28px 17px;line-height:1",
+      "neseccary",
+    ],
+    [
+      "textarea",
+      "height:180px;padding:12px 28px;line-height:1.6",
+      "First line.\nIs this neseccary?",
+    ],
+    [
+      "textarea",
+      "box-sizing:content-box;height:180px;padding:12px 28px;line-height:1.6",
+      "First line.\nIs this neseccary?",
+    ],
+  ]) {
+    await page.evaluate(
+      ({ tag, css, text }) => {
+        document.querySelector("#geometry-field")?.remove();
+        document.querySelector("#geometry-reference")?.remove();
+        const field = document.createElement(tag);
+        field.id = "geometry-field";
+        field.style.cssText = `position:fixed;left:30px;top:30px;width:600px;box-sizing:border-box;border:2px solid #ccc;font:32px Arial;text-align:left;${css}`;
+        field.value = text;
+        document.body.append(field);
+        // A DOM text range provides an independent reference for the
+        // native input's centered text and the textarea's top-aligned lines.
+        const reference = document.createElement("div");
+        reference.id = "geometry-reference";
+        reference.style.cssText = field.style.cssText;
+        reference.style.pointerEvents = "none";
+        reference.style.visibility = "hidden";
+        const span = document.createElement("span");
+        span.style.whiteSpace = tag === "input" ? "pre" : "pre-wrap";
+        span.style.overflowWrap = "break-word";
+        if (tag === "input") {
+          reference.style.display = "flex";
+          reference.style.alignItems = "center";
+          span.style.lineHeight = "normal";
+        }
+        span.textContent = text;
+        reference.append(span);
+        document.body.append(reference);
+      },
+      { tag, css, text },
+    );
+    await page.locator("#geometry-field").focus();
+    const underline = q.getByRole("button", {
+      name: "Possible spelling mistake: neseccary",
+      exact: true,
+    });
+    await underline.waitFor();
+    const expected = await page.evaluate(() => {
+      const node = document.querySelector(
+        "#geometry-reference span",
+      ).firstChild;
+      const offset = node.textContent.indexOf("neseccary");
+      const range = document.createRange();
+      range.setStart(node, offset);
+      range.setEnd(node, offset + "neseccary".length);
+      return range.getBoundingClientRect().toJSON();
+    });
+    const line = await underline.boundingBox();
+    assert(Math.abs(line.x - expected.left) < 1, `${tag}: underline left`);
+    assert(
+      Math.abs(line.width - expected.width) < 1,
+      `${tag}: underline width`,
+    );
+    assert(
+      Math.abs(line.y + line.height - (expected.bottom + 1)) < 1,
+      `${tag} (${css}): underline must sit below the native text`,
+    );
+    await page.mouse.click(
+      (expected.left + expected.right) / 2,
+      (expected.top + expected.bottom) / 2,
+    );
+    await expect(q.locator(".card")).toContainText("neseccary→necessary");
+    pass(`${tag} (${css}): underline and word hit target follow native text`);
+  }
   assert.deepEqual(errors, []);
   await mkdir("artifacts", { recursive: true });
   await writeFile(
