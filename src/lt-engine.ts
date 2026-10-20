@@ -10,6 +10,16 @@ export type LtLanguage = "de" | "ro";
 const locales: Record<LtLanguage, string> = { de: "de-DE", ro: "ro-RO" };
 const names: Record<LtLanguage, string> = { de: "German", ro: "Romanian" };
 
+let initializing: ReturnType<typeof init> | undefined;
+function initializeWasm(wasm: ArrayBuffer) {
+  // The bindings share one global WASM instance. Concurrent initialization
+  // would replace its memory and invalidate engines created by the first call.
+  return (initializing ??= init({ module_or_path: wasm }).catch((error) => {
+    initializing = undefined;
+    throw error;
+  }));
+}
+
 /** LingoTweaker reports UTF-8 byte ranges; editors use UTF-16 code units. */
 export function ltByteMatches(text: string, matches: any[]): any[] {
   const offsets = new Map<number, number>([[0, 0]]);
@@ -46,7 +56,7 @@ export function createLtChecker(
   const engine = () =>
     (loading ??= (async () => {
       const { wasm, pack } = await loadAssets();
-      await init({ module_or_path: wasm });
+      await initializeWasm(wasm);
       const instance = new LtEngine(
         locales[language],
         pack,
