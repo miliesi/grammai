@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">grammai</h1>
 <p align="center"><strong>AI writing assistance. Free &amp; open source.</strong></p>
-<p align="center">Offline English and German grammar checks, with rewrites and translation through your own Claude Code or Codex account.</p>
+<p align="center">Offline English, German and Romanian grammar checks, with rewrites and translation through your own Claude Code or Codex account.</p>
 <p align="center"><a href="#chrome-web-store"><img src="docs/assets/chrome-button.svg" width="300" height="48" alt="Get grammai for Chrome — coming soon" /></a></p>
 <!-- Replace #chrome-web-store above with the real listing URL after the first upload. -->
 <p align="center"><a href="https://affonso.io"><img src="public/brand/affonso-mark.svg" width="24" height="24" alt="Affonso logo" /></a><br/>Sponsored by <a href="https://affonso.io"><strong>Affonso</strong></a></p>
@@ -13,15 +13,15 @@
 
 grammai is an open-source writing assistant for Chrome and Chromium browsers such as Helium. It checks what you write, highlights issues in place, and lets you apply corrections without leaving the editor.
 
-**The extension is free.** English and German spelling and grammar work on your device, without an account or extra software. Optional AI features use your own signed-in Claude Code or Codex CLI. Your provider's access requirements and usage limits apply; grammai does not include an AI subscription.
+**The extension is free.** English, German and Romanian spelling and grammar work on your device, without an account or extra software. Optional AI features use your own signed-in Claude Code or Codex CLI. Your provider's access requirements and usage limits apply; grammai does not include an AI subscription.
 
 ## A little help, right where you write
 
-- **Spelling and grammar, offline.** English and German engines and dictionaries are bundled with the extension.
+- **Spelling and grammar, offline.** English, German and Romanian engines and dictionaries are bundled with the extension.
 - **Context matters.** Local grammar rules and targeted word-confusion checks cover constructions such as “Ist das wirklich war?” → “Ist das wirklich wahr?” An optional AI context check handles a broader passage.
 - **Corrections in place.** Hover to highlight a marked word, click to review, then accept or dismiss. Undo restores the last grammai edit.
 - **Rewrites in your voice.** Improve clarity, shorten a passage, change the tone, or save your own named prompts.
-- **Translate and keep writing.** Translate between English and German and replace the selection, or the active field, in one action.
+- **Translate and keep writing.** Translate between English and German or Romanian and replace the selection, or the active field, in one action.
 - **Quiet by default.** The action pill appears only when you select text. Light and dark modes, keyboard shortcuts and per-site controls are included.
 
 ## See it in action
@@ -50,7 +50,7 @@ npm run build
 
 Use **Node.js 22 or newer** to build the project. Open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the generated `dist` directory. Helium uses the same extension management screen.
 
-Open a supported text field and start writing. German and English are detected automatically. Grammar checking needs no helper, Java, Homebrew, LanguageTool installation, API key or sign-in. The German engine takes a few seconds to initialize on its first check.
+Open a supported text field and start writing. English, German and Romanian are detected automatically. Grammar checking needs no helper, Java, Homebrew, LanguageTool installation, API key or sign-in. The German and Romanian engines take a few seconds to initialize on their first check.
 
 Language preferences and the English spelling variant are available under **All settings**. After rebuilding an unpacked extension, reload it and the website tabs where you want to use the new version.
 
@@ -87,7 +87,7 @@ Read the [privacy policy](PRIVACY.md) or [data-flow explanation](docs/privacy.md
 
 Current support covers textareas, suitable text inputs, standard `contenteditable` fields and tested Draft.js editing flows, including X-style editors. Dedicated Google Docs canvas support and general Shadow DOM, Slate and ProseMirror adapters are not complete.
 
-Language detection can be ambiguous on short or mixed-language text. Grammar coverage is limited, and context suggestions can be wrong. AI translation currently supports English and German. This release does not claim full Grammarly or LanguageTool parity.
+Language detection can be ambiguous on short or mixed-language text. Grammar coverage is limited, and context suggestions can be wrong. AI translation currently supports English, German and Romanian. This release does not claim full Grammarly or LanguageTool parity.
 
 ## Build with us
 

@@ -13,6 +13,8 @@ export interface Settings {
   dictionary: string[];
   dialect: "en-US" | "en-GB";
   languageMode: LanguageMode;
+  /** Language that automatic translation uses for English text. */
+  translatePartner: Exclude<WritingLanguage, "en">;
   categories: Record<Category, boolean>;
   aiProvider: "auto" | "claude" | "codex";
   aiModel: string;
@@ -27,6 +29,7 @@ export const DEFAULT_SETTINGS: Settings = {
   dictionary: [],
   dialect: "en-US",
   languageMode: "auto",
+  translatePartner: "de",
   categories: {
     correctness: true,
     clarity: true,
@@ -62,7 +65,8 @@ export type RewriteStyle =
   | "fix"
   | "translate-auto"
   | "translate-en"
-  | "translate-de";
+  | "translate-de"
+  | "translate-ro";
 export function isTranslation(style?: RewriteStyle) {
   return typeof style === "string" && style.startsWith("translate-");
 }

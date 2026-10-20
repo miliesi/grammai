@@ -6,9 +6,18 @@ import { gunzipSync } from "node:zlib";
 import { zipSync, unzipSync } from "fflate";
 
 const root = path.resolve("dist");
-const germanPackHash = JSON.parse(
-  await readFile("node_modules/lingotweaker-data-de/manifest.json", "utf8"),
-).languages.de.pack.sha256;
+// Pinned upstream packs, verified byte-for-byte before their vocabulary counts as public.
+const verifiedPacks = {};
+for (const [file, code] of [
+  ["german.pack.gz", "de"],
+  ["romanian.pack.gz", "ro"],
+])
+  verifiedPacks[file] = JSON.parse(
+    await readFile(
+      `node_modules/lingotweaker-data-${code}/manifest.json`,
+      "utf8",
+    ),
+  ).languages[code].pack.sha256;
 const manifest = JSON.parse(
   await readFile(path.join(root, "manifest.json"), "utf8"),
 );
@@ -66,12 +75,13 @@ function inspect(name, bytes, publicVocabulary = false) {
     for (const [child, data] of Object.entries(unzipSync(bytes)))
       inspect(`${name}/${child}`, data);
   } else if (name.endsWith(".gz")) {
-    // Proper names in the pinned public German dictionary can coincide with a
-    // local username. Verify the upstream pack byte-for-byte before treating its
-    // vocabulary as public; machine paths and credential patterns still fail.
+    // Proper names in the pinned public German and Romanian dictionaries can
+    // coincide with a local username. Verify the upstream pack byte-for-byte
+    // before treating its vocabulary as public; machine paths and credential
+    // patterns still fail.
     const verified =
-      name === "german.pack.gz" &&
-      createHash("sha256").update(bytes).digest("hex") === germanPackHash;
+      Object.hasOwn(verifiedPacks, name) &&
+      createHash("sha256").update(bytes).digest("hex") === verifiedPacks[name];
     inspect(name.slice(0, -3), gunzipSync(bytes), verified);
   }
 }
@@ -132,6 +142,7 @@ for (const name of [
   "privacy.html",
   "german.wasm",
   "german.pack.gz",
+  "romanian.pack.gz",
   "grammar-offscreen.html",
   "grammar-offscreen.js",
   "german-worker.js",

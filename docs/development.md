@@ -20,8 +20,10 @@ Load `dist` as an unpacked extension. `npm run demo` serves a writing room for t
 | `src/editor-text.ts`       | Editable text and DOM-range mapping                                       |
 | `src/background.ts`        | Message routing, English checking and optional native requests            |
 | `src/live-engine.ts`       | Local Harper checks and result adaptation                                 |
-| `src/german-engine.ts`     | German WASM loading and UTF-8 to UTF-16 adaptation                        |
-| `src/grammar-offscreen.ts` | Dedicated German worker lifecycle                                         |
+| `src/lt-engine.ts`         | German and Romanian WASM loading and UTF-8 to UTF-16 adaptation           |
+| `src/lt-issues.ts`         | Shared adaptation of engine matches to editor issues                      |
+| `src/german.ts`, `src/romanian.ts` | Language-specific rules and wording on top of the engine          |
+| `src/grammar-offscreen.ts` | Dedicated worker lifecycle for German and Romanian                                         |
 | `src/rewrite-ui.ts`        | Shared rewrite and translation views                                      |
 | `native/`                  | Optional native helper and CLI requests                                   |
 | `public/`                  | Extension manifest, pages, icons and license notices                      |
@@ -30,17 +32,17 @@ Load `dist` as an unpacked extension. `npm run demo` serves a writing room for t
 
 ## Local checking
 
-English uses Harper 2.13.0 and Hunspell vocabulary. German uses an unmodified LingoTweaker 0.2.8 WebAssembly binary and language pack with LanguageTool-derived rules and dictionaries. Language detection uses ELD locally.
+English uses Harper 2.13.0 and Hunspell vocabulary. German and Romanian use an unmodified LingoTweaker 0.2.8 WebAssembly binary and one language pack each, with LanguageTool-derived rules and dictionaries. Language detection uses ELD locally.
 
-German rule compilation runs in a dedicated worker owned by an offscreen document, keeping the editor and extension UI responsive. After 60 seconds without a German request, the worker terminates to release WASM memory. Its next request initializes it again. This engine uses more memory than the English engine; a cold check is slower than subsequent updates.
+German and Romanian rule compilation runs in a dedicated worker owned by an offscreen document, keeping the editor and extension UI responsive. After 60 seconds without a German or Romanian request, the worker terminates to release WASM memory. Its next request initializes it again. This engine uses more memory than the English engine; a cold check is slower than subsequent updates.
 
-All engines and language resources ship inside the extension. No runtime code or dictionary is fetched from a CDN. The build verifies the pinned German pack checksum and extracts upstream license notices.
+All engines and language resources ship inside the extension. No runtime code or dictionary is fetched from a CDN. The build verifies each pinned language pack checksum and extracts upstream license notices.
 
 The old Java LanguageTool server files are retained for historical native compatibility. Current grammar checking does not use that server or its installer.
 
 ## Editing correctness
 
-All browser/editor spans use UTF-16. The German engine's UTF-8 byte spans must be converted before applying edits. Replacements verify the exact original text and editor version; stale results must not change a new draft.
+All browser/editor spans use UTF-16. The German and Romanian engines' UTF-8 byte spans must be converted before applying edits. Replacements verify the exact original text and editor version; stale results must not change a new draft.
 
 Detected Draft.js editors receive edits through controlled paste/deletion handlers rather than direct DOM mutation. This avoids divergent DOM and editor state after translation. Keep typing, Backspace, select-all/delete and undo checks when changing this path.
 

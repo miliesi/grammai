@@ -48,6 +48,7 @@
     "eld": "2.1.0",
     "harper.js": "2.13.0",
     "lingotweaker-data-de": "0.2.8",
+    "lingotweaker-data-ro": "0.2.8",
     "lingotweaker-wasm": "0.2.8",
     "nspell": "^2.1.5"
   },

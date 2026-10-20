@@ -1,15 +1,31 @@
-import { getSettings, isTranslation, type Snapshot } from "./shared";
+import {
+  getSettings,
+  isTranslation,
+  type RewriteStyle,
+  type Snapshot,
+} from "./shared";
 import { nativeRequest, cancelNative } from "./native-client";
 import { createBinaryModuleFromUrl } from "harper.js";
 import { createLiveChecker } from "./live-engine";
-import { detectLanguage } from "./language";
-import { checkGerman } from "./german-client";
+import { detectLanguage, type WritingLanguage } from "./language";
+import { checkLocal } from "./lt-client";
 const checker = createLiveChecker(
   createBinaryModuleFromUrl(
     chrome.runtime.getURL("harper_wasm_slim_bg.wasm"),
     "slim",
   ),
 );
+/** Automatic translation goes to English, or from English to the chosen partner language. */
+function translationTarget(
+  style: RewriteStyle,
+  text: string,
+  partner: WritingLanguage,
+): WritingLanguage {
+  if (style === "translate-en") return "en";
+  if (style === "translate-de") return "de";
+  if (style === "translate-ro") return "ro";
+  return detectLanguage(text) === "en" ? partner : "en";
+}
 const snapshots = new Map<number, Snapshot>();
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
   const tabId = sender.tab?.id;
@@ -23,8 +39,8 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
         if (!settings.enabled) return { ok: true, issues: [] };
         const language = detectLanguage(message.text, settings.languageMode);
         if (!message.text.trim()) return { ok: true, issues: [], language };
-        if (language === "de") {
-          const response = await checkGerman(message.text, settings);
+        if (language !== "en") {
+          const response = await checkLocal(language, message.text, settings);
           return { ...response, language };
         }
         const issues = await checker.check(message.text, settings);
@@ -78,14 +94,11 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
             model: isTranslation(message.style) ? "" : settings.aiModel,
             ...(isTranslation(message.style)
               ? {
-                  targetLanguage:
-                    message.style === "translate-en"
-                      ? "en"
-                      : message.style === "translate-de"
-                        ? "de"
-                        : detectLanguage(message.text) === "de"
-                          ? "en"
-                          : "de",
+                  targetLanguage: translationTarget(
+                    message.style,
+                    message.text,
+                    settings.translatePartner,
+                  ),
                 }
               : {}),
           },

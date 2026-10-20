@@ -67,7 +67,7 @@ const mac = /Mac/.test(navigator.platform);
 if (!mac) {
   const note = document.querySelector("#platform-note")!;
   note.textContent =
-    "The optional AI helper currently supports macOS. English and German spelling and grammar work here directly in the extension.";
+    "The optional AI helper currently supports macOS. English, German and Romanian spelling and grammar work here directly in the extension.";
   note.classList.add("unsupported");
   for (const button of document.querySelectorAll<HTMLButtonElement>(
     ".copy-command",

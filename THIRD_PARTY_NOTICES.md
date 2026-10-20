@@ -7,6 +7,7 @@ The original grammai code is licensed under **GPL-3.0-only**. Third-party code a
 - **ELD 2.1.0:** local language detection, Apache-2.0. Notice: `public/licenses/eld-APACHE-2.0.txt`.
 - **LingoTweaker 0.2.8:** an independent Rust/WebAssembly port using LanguageTool-derived rules and data, LGPL-2.1-or-later. The engine and German pack are shipped unmodified as separate files. Source commit: `819dc354224c9087ff486708adfd413ecb45f466` in [fiduswriter/LingoTweaker](https://github.com/fiduswriter/LingoTweaker/tree/819dc354224c9087ff486708adfd413ecb45f466).
 - **German language data:** includes CC-BY-SA-4.0 POS data, GPL-licensed igerman98/frami Hunspell data, Apache-2.0 compound word lists and other upstream resources. Complete attributions and license texts are retained in `public/licenses/lingotweaker-THIRD_PARTY_NOTICES.md`. The build extracts the pack's original license files into `dist/licenses/german-data/`.
+- **Romanian language data:** the Romanian Hunspell dictionary (rospell; GPL-2.0 / LGPL-2.1 / MPL-1.1 tri-license) and Romanian part-of-speech data (LGPL, Ionuț Păduraru), plus other upstream resources, shipped unmodified in a separate pack from the same pinned LingoTweaker release. The build extracts the pack's original license files into `dist/licenses/romanian-data/`.
 
 `npm ci` installs the exact dependency tree recorded in `package-lock.json`, including development-only test/build tooling. React and Draft.js are used for editor regression tests and are not bundled into the extension runtime.
 
