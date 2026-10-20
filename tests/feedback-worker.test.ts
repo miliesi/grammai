@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import worker, { type FeedbackEnv } from "../services/feedback/worker";
 
+import { appEnv, mockGitHub } from "./feedback-app-fixture";
+
 const origin = `chrome-extension://${"a".repeat(32)}`;
 const report = {
   kind: "bug",
@@ -15,7 +17,7 @@ const limiter = {
   },
 };
 const env: FeedbackEnv = {
-  GITHUB_TOKEN: "test-only-token",
+  ...appEnv,
   GITHUB_REPOSITORY: "zilvestro/grammai",
   FEEDBACK_LIMIT: limiter,
   GLOBAL_LIMIT: limiter,
@@ -37,20 +39,16 @@ const request = (
 
 test("explicit feedback creates a GitHub issue without forwarding extra client fields", async (t) => {
   const calls: Array<{ url: unknown; init?: RequestInit }> = [];
-  t.mock.method(
-    globalThis,
-    "fetch",
-    async (url: unknown, init?: RequestInit) => {
-      calls.push({ url, init });
-      return Response.json(
-        {
-          number: 42,
-          html_url: "https://github.com/zilvestro/grammai/issues/42",
-        },
-        { status: 201 },
-      );
-    },
-  );
+  mockGitHub(t, async (url: unknown, init?: RequestInit) => {
+    calls.push({ url, init });
+    return Response.json(
+      {
+        number: 42,
+        html_url: "https://github.com/zilvestro/grammai/issues/42",
+      },
+      { status: 201 },
+    );
+  });
   for (const kind of ["bug", "idea"]) {
     const response = await worker.fetch(
       request({
@@ -74,7 +72,7 @@ test("explicit feedback creates a GitHub issue without forwarding extra client f
     );
     assert.equal(
       new Headers(call.init!.headers).get("Authorization"),
-      "Bearer test-only-token",
+      "Bearer test-installation-token",
     );
     const payload = JSON.parse(String(call.init!.body));
     assert.equal(payload.title, report.title);
@@ -120,7 +118,12 @@ test("rate limits and missing credentials stop reports without disclosing secret
     assert.fail("unexpected GitHub request"),
   );
   assert.equal(
-    (await worker.fetch(request(), { ...env, GITHUB_TOKEN: undefined })).status,
+    (
+      await worker.fetch(request(), {
+        ...env,
+        GITHUB_APP_PRIVATE_KEY: undefined,
+      })
+    ).status,
     503,
   );
   for (const binding of ["FEEDBACK_LIMIT", "GLOBAL_LIMIT"] as const) {
@@ -165,14 +168,14 @@ test("preflight supports different extension IDs, but normal websites cannot sub
 });
 
 test("upstream failures return a safe error rather than GitHub details or tokens", async (t) => {
-  t.mock.method(globalThis, "fetch", async () =>
+  mockGitHub(t, async () =>
     Response.json({ message: "SECRET_INTERNAL_ERROR" }, { status: 422 }),
   );
   const response = await worker.fetch(request(), env);
   assert.equal(response.status, 502);
   const text = await response.text();
   assert(!text.includes("SECRET_INTERNAL_ERROR"));
-  assert(!text.includes(env.GITHUB_TOKEN!));
+  assert(!text.includes(env.GITHUB_APP_PRIVATE_KEY!));
 });
 
 const png = Uint8Array.from(
@@ -220,20 +223,16 @@ function imageBucket() {
 test("screenshots are stored under random public URLs and embedded in the GitHub issue", async (t) => {
   const { bucket, objects } = imageBucket();
   let payload = "";
-  t.mock.method(
-    globalThis,
-    "fetch",
-    async (_url: unknown, init: RequestInit) => {
-      payload = String(init.body);
-      return Response.json(
-        {
-          number: 42,
-          html_url: "https://github.com/zilvestro/grammai/issues/42",
-        },
-        { status: 201 },
-      );
-    },
-  );
+  mockGitHub(t, async (_url: unknown, init?: RequestInit) => {
+    payload = String(init!.body);
+    return Response.json(
+      {
+        number: 42,
+        html_url: "https://github.com/zilvestro/grammai/issues/42",
+      },
+      { status: 201 },
+    );
+  });
   const imageEnv = { ...env, FEEDBACK_IMAGES: bucket };
   assert.equal(
     (
@@ -302,7 +301,7 @@ test("uploads are removed after definite rejection or upload failure, retained a
   const { bucket, objects } = imageBucket();
   const imageEnv = { ...env, FEEDBACK_IMAGES: bucket };
   let mode = "rejected";
-  t.mock.method(globalThis, "fetch", async () => {
+  mockGitHub(t, async () => {
     if (mode === "timeout") throw new Error("timeout");
     return new Response(null, { status: mode === "rejected" ? 422 : 502 });
   });
@@ -343,7 +342,7 @@ test("capability check reflects storage availability without requiring credentia
       }),
       {
         ...env,
-        GITHUB_TOKEN: undefined,
+        GITHUB_APP_PRIVATE_KEY: undefined,
         FEEDBACK_IMAGES: enabled ? imageBucket().bucket : undefined,
       },
     );

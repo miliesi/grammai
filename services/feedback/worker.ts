@@ -1,3 +1,10 @@
+import {
+  appConfigured,
+  githubHeaders,
+  installationToken,
+  type GitHubAppEnv,
+} from "./github-app";
+
 interface RateLimiter {
   limit(options: { key: string }): Promise<{ success: boolean }>;
 }
@@ -12,8 +19,7 @@ interface ImageBucket {
   delete(keys: string[]): Promise<void>;
 }
 
-export interface FeedbackEnv {
-  GITHUB_TOKEN?: string;
+export interface FeedbackEnv extends GitHubAppEnv {
   GITHUB_REPOSITORY: string;
   FEEDBACK_LIMIT: RateLimiter;
   GLOBAL_LIMIT: RateLimiter;
@@ -86,7 +92,10 @@ export default {
       headers.set("Allow", "GET, POST, OPTIONS");
       return reply(405, { error: "Use POST to send feedback." });
     }
-    if (!env.GITHUB_TOKEN || !/^[\w.-]+\/[\w.-]+$/.test(env.GITHUB_REPOSITORY))
+    if (
+      !appConfigured(env) ||
+      !/^[\w.-]+\/[\w.-]+$/.test(env.GITHUB_REPOSITORY)
+    )
       return reply(503, {
         error: "Feedback is temporarily unavailable. Please use email.",
       });
@@ -195,6 +204,16 @@ export default {
           });
         imageBytes.push(image);
       }
+      // Authenticate before saving any images. App failures create no orphan
+      // uploads and cannot fall back to publishing as a personal account.
+      let token: string;
+      try {
+        token = await installationToken(env, env.GITHUB_REPOSITORY);
+      } catch {
+        return reply(503, {
+          error: "Feedback is temporarily unavailable. Please use email.",
+        });
+      }
       for (const image of imageBytes) {
         const key = `${crypto.randomUUID()}.png`;
         // Record the key first so a partially failed upload is also cleaned up.
@@ -217,11 +236,8 @@ export default {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${env.GITHUB_TOKEN}`,
-            Accept: "application/vnd.github+json",
-            "Content-Type": "application/json",
-            "User-Agent": "grammai-feedback",
-            "X-GitHub-Api-Version": "2026-03-10",
+            ...githubHeaders,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             title: data.title.trim(),

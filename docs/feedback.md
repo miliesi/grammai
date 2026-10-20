@@ -10,11 +10,23 @@ The extension captures bugs and ideas in `feedback.html` and sends them only aft
    npx wrangler@4.151.3 login --scopes account:read user:read workers:write workers_scripts:write
    ```
 
-2. Create a dedicated, fine-grained GitHub personal access token for **only `zilvestro/grammai`**, with **Issues: Read and write**. Do not reuse a broad developer CLI token. Paste the dedicated token into Wrangler's secret prompt, not a source file or chat:
+2. Create and install the private **grammai feedback** GitHub App with **Issues: Read and write** on **only `zilvestro/grammai`**:
 
    ```sh
-   npx wrangler@4.151.3 secret put GITHUB_TOKEN --config services/feedback/wrangler.jsonc
+   node scripts/setup-feedback-app.mjs
    ```
+
+   Open the printed local URL in the browser where you are signed into GitHub. The prepared manifest requests no user OAuth, code permissions or webhook delivery. Register the app, then install it using **Only select repositories → zilvestro/grammai**. The local setup verifies the owner, permissions and single-repository installation before passing `GITHUB_APP_ID`, `GITHUB_APP_INSTALLATION_ID` and the PKCS8 `GITHUB_APP_PRIVATE_KEY` directly to Wrangler via stdin. Private credentials are held in memory, never saved in the repo or displayed in the browser. Keep the setup process running until it reports success, then stop it with Ctrl-C. `GRAMMAI_APP_SETUP_PORT` can override port 4176.
+
+   If registration succeeds but setup is interrupted before credentials reach Cloudflare, the key held by that process is lost. Generate a fresh private key in the existing app's GitHub settings rather than creating another app. Convert it to PKCS8 and send it directly to Wrangler without displaying it:
+
+   ```sh
+   openssl pkcs8 -topk8 -nocrypt -in /path/to/downloaded-private-key.pem | npx wrangler@4.151.3 secret put GITHUB_APP_PRIVATE_KEY --config services/feedback/wrangler.jsonc
+   npx wrangler@4.151.3 secret put GITHUB_APP_ID --config services/feedback/wrangler.jsonc
+   npx wrangler@4.151.3 secret put GITHUB_APP_INSTALLATION_ID --config services/feedback/wrangler.jsonc
+   ```
+
+   Delete the downloaded key securely after verifying the setup. Retain an old app key only until its replacement works, then revoke the old key in GitHub settings.
 
 3. Deploy the worker:
 
@@ -34,7 +46,7 @@ The extension captures bugs and ideas in `feedback.html` and sends them only aft
    npm run build
    ```
 
-The committed endpoint is `https://grammai-feedback.grammai.workers.dev/v1/feedback`. The service must have its `GITHUB_TOKEN` secret before reports can be saved. Both GitHub source builds and Store packages use this endpoint without user configuration. A build can override it with `GRAMMAI_FEEDBACK_ENDPOINT` for testing or a fork. Clearing the endpoint disables direct sending and shows email fallback. Do not release a build pointed at an unconfigured service as live.
+The committed endpoint is `https://grammai-feedback.grammai.workers.dev/v1/feedback`. The service must have all three `GITHUB_APP_*` secrets before reports can be saved. The live app is `grammai-feedback`, installed only on `zilvestro/grammai`; issues are attributed to `grammai-feedback[bot]`. Personal access tokens are not accepted, even if a legacy `GITHUB_TOKEN` binding exists. After deploying this version, remove that legacy secret with `npx wrangler@4.151.3 secret delete GITHUB_TOKEN --config services/feedback/wrangler.jsonc` and revoke the old dedicated PAT in GitHub settings. Both GitHub source builds and Store packages use this endpoint without user configuration. A build can override it with `GRAMMAI_FEEDBACK_ENDPOINT` for testing or a fork. Clearing the endpoint disables direct sending and shows email fallback. Do not release a build pointed at an unconfigured service as live.
 
 The build adds only the chosen HTTPS origin to host permissions and the extension's `connect-src` policy. Do not add tokens to `feedback.config.json`, build variables or the extension. `.dev.vars` files and Wrangler's local state are ignored by Git.
 
@@ -49,7 +61,7 @@ Screenshots are implemented but remain unavailable on the live service until R2 
    npx wrangler@4.151.3 r2 bucket create grammai-feedback-images
    ```
 
-3. Uncomment `r2_buckets` in `services/feedback/wrangler.jsonc` and deploy using the same command above. The existing GitHub token needs no additional permissions. No extension rebuild is needed to enable uploads.
+3. Uncomment `r2_buckets` in `services/feedback/wrangler.jsonc` and deploy using the same command above. The GitHub App needs no additional permissions. No extension rebuild is needed to enable uploads.
 
 Opening **Add screenshots** checks `GET /v1/feedback`, which returns `{ "images": true }` only when the bucket binding exists. The form accepts up to two PNG, JPEG or WebP files of 2 MiB each. It redraws each selected image locally as PNG, strips original filenames and embedded metadata, rejects images above 16 million pixels or normalized images above 2 MiB, and offers previews and removal. Selection sends no images. Pressing Send submits the explicit report fields and normalized images together as multipart form data. Text-only reports continue to use JSON.
 
@@ -63,7 +75,7 @@ Images stay in R2 until a maintainer removes them. Deleting an issue does not au
 
 Cross-origin requests are permitted for syntactically valid Chrome extension origins so unpacked builds and Store IDs both work. This is compatibility filtering, not authentication: the endpoint intentionally accepts anonymous feedback. Rate-limit bindings allow three requests per minute per network and thirty total per minute in each Cloudflare location. These are per-location limits, not strict global quotas; adjust the unique namespaces and limits for the account if necessary. No cookies or client secrets are used. Request bodies are bounded, errors do not expose upstream responses, and worker observability is disabled in the supplied configuration.
 
-The form prevents repeated clicks while sending and retains the user's text on failure. An ambiguous timeout tells the user to check existing issues before resubmitting; there is no automatic retry or exactly-once delivery guarantee. Renew an expired GitHub token using `wrangler secret put` without rebuilding the extension. Unavailable services fall back to email.
+The form prevents repeated clicks while sending and retains the user's text on failure. An ambiguous timeout tells the user to check existing issues before resubmitting; there is no automatic retry or exactly-once delivery guarantee. The Worker signs short-lived RS256 app JWTs and exchanges them for installation tokens restricted to this repository and `issues: write`. Tokens expire after one hour and are created as needed, without a stored personal token or refresh token. Key rotation uses `wrangler secret put GITHUB_APP_PRIVATE_KEY`; no extension rebuild is required. Authentication failures return a generic error before uploading images or creating issues, with no personal-token fallback. Unavailable services fall back to email.
 
 ## Verify
 
@@ -75,6 +87,6 @@ GRAMMAI_FEEDBACK_ENDPOINT=https://feedback.grammai.test/v1/feedback npm run buil
 npm run test:feedback
 ```
 
-Tests mock GitHub and the submission endpoint; no public issues are posted. Test the extracted Store ZIP using `GRAMMAI_EXTENSION_PATH=/path/to/extracted/package npm run test:feedback`. Rebuild with the committed production endpoint before packaging a release. Live smoke tests should use an explicitly agreed synthetic report because successful submissions are public.
+Tests mock GitHub and the submission endpoint; no public issues are posted. App tests verify the RSA signature, JWT claims, repository and permission narrowing, authentication failures and rejection of a legacy PAT fallback. Test the extracted Store ZIP using `GRAMMAI_EXTENSION_PATH=/path/to/extracted/package npm run test:feedback`. Rebuild with the committed production endpoint before packaging a release. Live smoke tests should use an explicitly agreed synthetic report because successful submissions are public.
 
-References: [Cloudflare secrets](https://developers.cloudflare.com/workers/configuration/secrets/), [rate limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/), [GitHub issue creation](https://docs.github.com/en/rest/issues/issues#create-an-issue).
+References: [Cloudflare secrets](https://developers.cloudflare.com/workers/configuration/secrets/), [rate limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/), [GitHub issue creation](https://docs.github.com/en/rest/issues/issues#create-an-issue), [GitHub App manifests](https://docs.github.com/en/apps/sharing-github-apps/registering-a-github-app-from-a-manifest), [installation authentication](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app).

@@ -28,7 +28,7 @@ Active checks, suggestion fragments, requested AI previews and undo information 
 
 “Send feedback” opens a bundled form for bugs and ideas. Opening the form makes no external request. When you press **Send feedback**, the title, description and report type you enter, plus the extension version and any screenshots you choose to attach, are sent to grammai's feedback endpoint hosted by Cloudflare. Your editor text, page URL, browsing history and diagnostics are not collected or attached automatically.
 
-The endpoint creates a **public GitHub issue** in github.com/zilvestro/grammai using a server-side credential. You do not need a GitHub account and are not redirected to GitHub to submit. Published reports are public under GitHub's own privacy policy. Do not include private text, account details or tokens in the form.
+The endpoint creates a **public GitHub issue** in github.com/zilvestro/grammai using a server-side GitHub App credential. Issues are published under the app bot, not the submitter or a maintainer’s personal account. You do not need a GitHub account and are not redirected to GitHub to submit. Published reports are public under GitHub's own privacy policy. Do not include private text, account details or tokens in the form.
 
 Cloudflare processes the request and its network metadata. The endpoint uses the connecting IP for short-lived rate limiting; it does not put IP addresses in GitHub issues or deliberately log report bodies, IPs or credentials. Cloudflare's own data handling also applies.
 
